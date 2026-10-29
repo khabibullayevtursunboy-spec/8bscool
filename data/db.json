@@ -1,0 +1,526 @@
+{
+  "version": 18,
+  "lastUpdated": 1793270255689,
+  "users": [
+    {
+      "id": "user_1793224108505",
+      "username": "ttt",
+      "fullName": "tursunboy",
+      "password": "8m7n6b5v",
+      "grade": "8-B",
+      "bio": "8-B sinf o'quvchisi. Bilimga intiluvchan!",
+      "favoriteTeacher": "",
+      "bestFriend": "",
+      "avatar": "",
+      "coins": 150,
+      "xp": 154,
+      "level": 1,
+      "badges": [
+        "faol_ishtirokchi"
+      ],
+      "inventory": [],
+      "stats": {
+        "duelsWon": 0,
+        "duelsPlayed": 0,
+        "testsCompleted": 0,
+        "reviewsGiven": 0,
+        "mathHighStreak": 0,
+        "questsCompleted": 0
+      },
+      "claimedPromos": [],
+      "createdAt": "2026-10-28",
+      "lastDailyBonusDate": "2026-10-29",
+      "dailyBonusStreak": 2
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "subject": "Texnologiya",
+      "question": "Yog'ochga ishlov berish tokarlik stanogida (ST D-120M) zagotovkaga aylanma harakat beruvchi asosiy tugun nima deb ataladi?",
+      "options": [
+        "Oldingi babka (Shpindel)",
+        "Orqa babka",
+        "Podruchnik",
+        "Stanina"
+      ],
+      "correctIndex": 0,
+      "explanation": "Oldingi babka ichidagi shpindel valiga zagotovka qotiriladi va elektrodvigatel orqali unga aylanma harakat beriladi.",
+      "points": 20
+    },
+    {
+      "id": "q2",
+      "subject": "Texnologiya",
+      "question": "Shtangensirkul asbobi yordamida detallarning qanday o'lchamlarini aniqlash mumkin?",
+      "options": [
+        "Faqat tashqi o'lchamini",
+        "Faqat chuqurligini",
+        "Tashqi, ichki diametr va chuqurligini",
+        "Faqat burchak gradusini"
+      ],
+      "correctIndex": 2,
+      "explanation": "Shtangensirkul pastki jag'lari bilan tashqi, yuqori jag'lari bilan ichki o'lchamni va chuqurlik o'lchagich tili bilan chuqurlikni o'lchaydi.",
+      "points": 25
+    },
+    {
+      "id": "q3",
+      "subject": "Texnologiya",
+      "question": "Metallarni arralashda chilangarlik ustaxonasida qaysi asbobdan foydalaniladi?",
+      "options": [
+        "Duradgorlik nozovkasi",
+        "Lobzik",
+        "Chilangarlik nozovkasi (metall arra)",
+        "Metall qaychi"
+      ],
+      "correctIndex": 2,
+      "explanation": "Metallarni to'g'ri chiziq bo'ylab kesish va arralashda mayda tishli chilangarlik nozovkasi ishlatiladi.",
+      "points": 20
+    },
+    {
+      "id": "q4",
+      "subject": "Texnologiya",
+      "question": "Buyumni tayyorlashning texnologik ketma-ketligi, qo'llaniladigan asboblar va o'lchamlar qaysi hujjatda ifodalanadi?",
+      "options": [
+        "Smeta hujjati",
+        "Texnologik xarita",
+        "Kafolat taloni",
+        "Foydalanish qo'llanmasi"
+      ],
+      "correctIndex": 1,
+      "explanation": "Texnologik xaritada har bir operatsiyaning ketma-ketligi, ish qurollari, xomashyo va nazorat usullari batafsil ko'rsatiladi.",
+      "points": 25
+    },
+    {
+      "id": "q5",
+      "subject": "Texnologiya",
+      "question": "Quyidagi metallar guruhidan qaysi biri rangli metallar hisoblanadi?",
+      "options": [
+        "Cho'yan va Po'lat",
+        "Temir va Rux",
+        "Mis (Cu) va Alyuminiy (Al)",
+        "Faqat cho'yan"
+      ],
+      "correctIndex": 2,
+      "explanation": "Temir va uning qotishmalari (cho'yan, po'lat) qora metallar, mis, alyuminiy, qo'rg'oshin va boshqalar rangli metallardir.",
+      "points": 20
+    },
+    {
+      "id": "q6",
+      "subject": "Texnologiya",
+      "question": "Elektr zanjirida tok kuchini o'lchovchi ampermetr asbobi zanjirga qanday ulanadi?",
+      "options": [
+        "Ketma-ket",
+        "Parallel",
+        "Aralash usulda",
+        "Faqat manbaga to'g'ridan-to'g'ri"
+      ],
+      "correctIndex": 0,
+      "explanation": "Ampermetr juda kichik ichki qarshilikka ega bo'lgani sababli elektr zanjiriga faqat ketma-ket ulanadi.",
+      "points": 25
+    },
+    {
+      "id": "q7",
+      "subject": "Texnologiya",
+      "question": "Ustaxona stanoklarida ishlashda eng muhim xavfsizlik texnikasi qoidasi qaysi?",
+      "options": [
+        "Qalin charm qo'lqopda ishlash",
+        "Maxsus kiyim kiyish, yenglarni tugish va himoya ko'zoynagi taqish",
+        "Tezroq ishlash uchun himoya qopqog'ini yechish",
+        "Stanok to'xtamasdan turib detalni o'lchash"
+      ],
+      "correctIndex": 1,
+      "explanation": "Aylanuvchi mexanizmlarda qo'lqop kiyish taqiqlanadi; maxsus fartuk, bosh kiyim va himoya ko'zoynagi taqish shart.",
+      "points": 20
+    },
+    {
+      "id": "q8",
+      "subject": "Texnologiya",
+      "question": "Chizmachilikda ko'rinmas qirralar va teshiklarning konturi qaysi chiziq turi bilan chiziladi?",
+      "options": [
+        "Asosiy yo'g'on tutash chiziq",
+        "Ingichka to'lqinsimon chiziq",
+        "Shtrix-punktir chiziq",
+        "Shtrix (uziq-uziq) chiziq"
+      ],
+      "correctIndex": 3,
+      "explanation": "Davlat standartiga ko'ra buyumning ko'rinmas konturlari shtrix (uziq-uziq) chiziq bilan chiziladi.",
+      "points": 20
+    },
+    {
+      "id": "q9",
+      "subject": "Texnologiya",
+      "question": "Quyidagi daraxt turlaridan qaysi biri eng qattiq va pishiq yog'ochlar guruhiga kiradi?",
+      "options": [
+        "Terak",
+        "Eman (Dub)",
+        "Tol",
+        "Qarag'ay"
+      ],
+      "correctIndex": 1,
+      "explanation": "Eman (Dub) daraxti zichligi va qattiqligi yuqori bo'lgan bargli qattiq yog'ochlar sinfiga mansub.",
+      "points": 20
+    },
+    {
+      "id": "q10",
+      "subject": "Texnologiya",
+      "question": "Metall yuzasiga oxirgi pardozlash (toza jilolash) berishda qaysi egov turidan foydalaniladi?",
+      "options": [
+        "Drahyovoy (yirik tishli)",
+        "Lixovoy (o'rta tishli)",
+        "Baxatli (mayin tishli)",
+        "Raspis egovi"
+      ],
+      "correctIndex": 2,
+      "explanation": "Baxatli egovlar 1 sm uzunlikda 45-80 ta mayin tishga ega bo'lib, 0.05-0.01 mm aniqlikda pardozlash imkonini beradi.",
+      "points": 25
+    },
+    {
+      "id": "q11",
+      "subject": "Texnologiya",
+      "question": "O'zbekistonda standart maishiy elektr tarmog'ining o'zgaruvchan kuchlanishi va chastotasi qancha?",
+      "options": [
+        "110 Volt, 60 Hz",
+        "380 Volt, 100 Hz",
+        "220 Volt, 50 Hz",
+        "12 Volt, 25 Hz"
+      ],
+      "correctIndex": 2,
+      "explanation": "Respublikamiz standartlariga binoan xonadon va maktab maishiy tarmog'i 220 V va 50 Hz chastotaga ega.",
+      "points": 20
+    },
+    {
+      "id": "q12",
+      "subject": "Texnologiya",
+      "question": "3D printerda buyumlarni qatlam-qatlam qilib eritib quyish orqali shakllantirish texnologiyasi nima deb ataladi?",
+      "options": [
+        "Additiv texnologiya",
+        "Subtraktiv texnologiya",
+        "Shtamplash",
+        "Prokatlash"
+      ],
+      "correctIndex": 0,
+      "explanation": "Materialni qatlamlab qo'shib (add) borish orqali buyum yasash additiv ishlab chiqarish (3D printing) deyiladi.",
+      "points": 25
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t1",
+      "fullName": "Karimova Ziyoda Rustamovna",
+      "subject": "Matematika",
+      "isClassMaster": true,
+      "className": "8-B sinf rahbari",
+      "avatar": "",
+      "bio": "15 yillik tajribaga ega oliy toifali matematika fani o'qituvchisi. Respublika olimpiadalariga o'quvchilarni tayyorlaydi.",
+      "reviewsCount": 14,
+      "averageRating": 4.9
+    },
+    {
+      "id": "t2",
+      "fullName": "Abdullayev Dilshod Ikromovich",
+      "subject": "Fizika",
+      "isClassMaster": true,
+      "className": "9-A sinf rahbari",
+      "avatar": "",
+      "bio": "Fizika fanidan qiziqarli laboratoriya tajribalari va amaliy darslari bilan mashhur ustoz.",
+      "reviewsCount": 11,
+      "averageRating": 4.8
+    },
+    {
+      "id": "t3",
+      "fullName": "Rahmonova Nilufar Aliyevna",
+      "subject": "Ona tili va Adabiyot",
+      "isClassMaster": true,
+      "className": "7-V sinf rahbari",
+      "avatar": "",
+      "bio": "Badiiy nutq madaniyati va adabiy to'garaklar rahbari, o'quvchilarni kitobsevarlikka ilhomlantiradi.",
+      "reviewsCount": 9,
+      "averageRating": 4.7
+    },
+    {
+      "id": "t4",
+      "fullName": "Sobirov Jamshid Po'latovich",
+      "subject": "Tarix",
+      "isClassMaster": true,
+      "className": "10-A sinf rahbari",
+      "avatar": "",
+      "bio": "Tarixiy obidalar, buyuk allomalar merosi va vatanparvarlik ruhidagi darslar ustasi.",
+      "reviewsCount": 12,
+      "averageRating": 4.85
+    },
+    {
+      "id": "t5",
+      "fullName": "Xalilova Gulnoza Baxtiyorovna",
+      "subject": "Ingliz tili",
+      "isClassMaster": false,
+      "avatar": "",
+      "bio": "IELTS 8.0 sohibi, zamonaviy Speaking Club va interaktiv metodlar asosida ingliz tilini o'rgatadi.",
+      "reviewsCount": 16,
+      "averageRating": 4.95
+    },
+    {
+      "id": "t6",
+      "fullName": "Mirzayev Elyor Samadovich",
+      "subject": "Informatika & Robototexnika",
+      "isClassMaster": false,
+      "avatar": "",
+      "bio": "Dasturlash, sun'iy intellekt va robototexnika to'garaklari koordinatori.",
+      "reviewsCount": 8,
+      "averageRating": 4.9
+    }
+  ],
+  "promos": [
+    {
+      "id": "promo1",
+      "code": "TEXNO2026",
+      "coins": 250,
+      "xp": 200,
+      "active": true,
+      "maxUses": 1000,
+      "usedCount": 15,
+      "description": "8-sinf Texnologiya fani maxsus promokodi!"
+    },
+    {
+      "id": "promo2",
+      "code": "TURSUNBOY",
+      "coins": 300,
+      "xp": 300,
+      "active": true,
+      "maxUses": 500,
+      "usedCount": 12,
+      "description": "Tursunboy ustozning maxsus rag'batlantiruvchi promokodi!"
+    },
+    {
+      "id": "promo3",
+      "code": "USTOZ29",
+      "coins": 200,
+      "xp": 150,
+      "active": true,
+      "maxUses": 1000,
+      "usedCount": 20,
+      "description": "Ustozlar tomonidan taqdim etiladigan rasmiy promokod."
+    },
+    {
+      "id": "promo4",
+      "code": "MAKTAB29",
+      "coins": 100,
+      "xp": 50,
+      "active": true,
+      "maxUses": 2000,
+      "usedCount": 35,
+      "description": "29-Maktab o'quvchilari uchun umumiy promokod."
+    }
+  ],
+  "announcements": [
+    {
+      "id": "ann1",
+      "title": "29-Maktabda Fanlar Bo'yicha 1v1 Intellektual Duel Ligasi Boshlandi!",
+      "content": "O'quvchilar endi do'stlari bilan online savol-javob duelida bellashib, maktab reytingida yuqoriga ko'tarilishi va maxsus nishonlarni ochishi mumkin!",
+      "date": "26 Oktyabr, 2026",
+      "type": "event",
+      "author": "Maktab Ma'muriyati"
+    },
+    {
+      "id": "ann2",
+      "title": "Sinf Rahbari va Ustozlarni Baholash Oyligi",
+      "content": "Sevimli o'qituvchilaringiz mehnatini 5 ta mezon bo'yicha baholab, samimiy izoh qoldiring. O'z fikringizni anonim yoki ochiq tarzda yozishingiz mumkin.",
+      "date": "25 Oktyabr, 2026",
+      "type": "important",
+      "author": "O'quvchilar Kengashi"
+    }
+  ],
+  "homework": [
+    {
+      "id": "hw1",
+      "subject": "Matematika",
+      "task": "Darslikdagi 145-148 mashqlar: Kvadrat tenglamalarni diskriminant orqali yechish.",
+      "dueDate": "Ertaga, 08:30",
+      "completed": false
+    },
+    {
+      "id": "hw2",
+      "subject": "Fizika",
+      "task": "Nyuton qonunlariga oid 3 ta masalani laboratoriya daftariga yechib kelish.",
+      "dueDate": "Chorshanba, 09:15",
+      "completed": false
+    },
+    {
+      "id": "hw3",
+      "subject": "Ingliz tili",
+      "task": "Unit 4: \"Modern Technologies\" mavzusida 100 so'zlik insho yozish.",
+      "dueDate": "Payshanba, 10:00",
+      "completed": false
+    }
+  ],
+  "schedule": [
+    {
+      "id": "sch_1",
+      "day": "Dushanba",
+      "time": "08:00 - 08:45",
+      "subject": "Texnologiya",
+      "room": "Ustaxona (101)",
+      "teacher": "Tursunboy Habibullayev"
+    },
+    {
+      "id": "sch_2",
+      "day": "Dushanba",
+      "time": "08:50 - 09:35",
+      "subject": "Texnologiya (Amaliyot)",
+      "room": "Ustaxona (101)",
+      "teacher": "Tursunboy Habibullayev"
+    },
+    {
+      "id": "sch_3",
+      "day": "Seshanba",
+      "time": "09:45 - 10:30",
+      "subject": "Texnik chizmachilik",
+      "room": "302-xona",
+      "teacher": "Tursunboy Habibullayev"
+    },
+    {
+      "id": "sch_4",
+      "day": "Chorshanba",
+      "time": "08:00 - 08:45",
+      "subject": "Metallga ishlov berish",
+      "room": "Chilangarlik xonasi",
+      "teacher": "Tursunboy Habibullayev"
+    },
+    {
+      "id": "sch_5",
+      "day": "Payshanba",
+      "time": "10:35 - 11:20",
+      "subject": "Elektrotexnika asoslari",
+      "room": "IT & Texno Lab",
+      "teacher": "Tursunboy Habibullayev"
+    },
+    {
+      "id": "sch_6",
+      "day": "Juma",
+      "time": "11:30 - 12:15",
+      "subject": "Zamonaviy texnologiyalar & 3D",
+      "room": "IT Lab",
+      "teacher": "Tursunboy Habibullayev"
+    },
+    {
+      "id": "sch_7",
+      "day": "Shanba",
+      "time": "09:00 - 10:30",
+      "subject": "Hunarmandchilik to'garagi",
+      "room": "Ustaxona (101)",
+      "teacher": "Tursunboy Habibullayev"
+    }
+  ],
+  "library": [
+    {
+      "id": "b1",
+      "title": "Algebra va Analiz Asoslari (8-sinf)",
+      "grade": "8-sinf",
+      "subject": "Matematika",
+      "author": "O'zbekiston Milliy Darsligi",
+      "pages": 224,
+      "summary": "Chiziqli funksiyalar, kvadrat tenglamalar, ko'phadlar va ularning amaliy tatbiqlari.",
+      "readTime": "4 soat"
+    },
+    {
+      "id": "b2",
+      "title": "Fizika Kursi (8-sinf)",
+      "grade": "8-sinf",
+      "subject": "Fizika",
+      "author": "P. Habibullayev",
+      "pages": 198,
+      "summary": "Issiqlik hodisalari, elektr zaryadlari, doimiy tok qonunlari va optika asoslari.",
+      "readTime": "3.5 soat"
+    },
+    {
+      "id": "b3",
+      "title": "O'zbekiston Tarixi (8-sinf)",
+      "grade": "8-sinf",
+      "subject": "Tarix",
+      "author": "A. Muhammadjonov",
+      "pages": 256,
+      "summary": "O'rta asrlarda O'rta Osiyo xonliklari, madaniyat, ilm-fan va allomalar merosi.",
+      "readTime": "5 soat"
+    },
+    {
+      "id": "b4",
+      "title": "Informatika va Raqamli Dunyo (8-sinf)",
+      "grade": "8-sinf",
+      "subject": "Informatika",
+      "author": "M. Aripov",
+      "pages": 176,
+      "summary": "Algoritmlash, Python dasturlash tili asoslari, kiberxavfsizlik va veb-texnologiyalar.",
+      "readTime": "3 soat"
+    }
+  ],
+  "quests": [
+    {
+      "id": "q_duel",
+      "title": "1v1 Duelda g'alaba qozonish",
+      "description": "Viktorina duelida raqibingizdan ko'ra ko'proq ball to'plang (Kamida 1 ta g'alaba)",
+      "rewardCoins": 50,
+      "rewardXp": 80,
+      "completed": false,
+      "type": "duel"
+    },
+    {
+      "id": "q_math",
+      "title": "Arifmetika poygasida 5+ streak",
+      "description": "45 soniyalik hisoblash poygasida ketma-ket 5 ta misolni to'g'ri yeching",
+      "rewardCoins": 40,
+      "rewardXp": 60,
+      "completed": false,
+      "type": "math"
+    },
+    {
+      "id": "q_chess",
+      "title": "Shaxmat yoki Shashka o'yinida g'alaba",
+      "description": "Botga qarshi yoki do'stingiz bilan shaxmat/shashka o'ynab kamida 1 marta g'olib bo'ling",
+      "rewardCoins": 50,
+      "rewardXp": 70,
+      "completed": false,
+      "type": "chess"
+    },
+    {
+      "id": "q_rev",
+      "title": "Ustozga samimiy baho berish",
+      "description": "O'qituvchilar reytingida kamida bitta ustozga xolis baho qoldiring",
+      "rewardCoins": 50,
+      "rewardXp": 40,
+      "completed": false,
+      "type": "review"
+    }
+  ],
+  "settings": {
+    "schoolName": "29-Maktab 8-Sinf Texnologiya Portali",
+    "heroTitle": "8-Sinf Texnologiya Fani & Multiplayer Portali",
+    "heroSubtitle": "29-sonli maktab 8-sinf o'quvchilari uchun texnologiya, duradgorlik, chilangarlik, elektrotexnika va texnologik xaritalar bo'yicha interaktiv bellashuv va ta'lim tizimi.",
+    "motto": "Hunarni o'rgan, mohir usta bo'l!",
+    "footerText": "© 2026 29-sonli maktab. 8-Sinf Texnologiya ta'limi. Made in Tursunboy."
+  },
+  "teacher_accounts": [
+    {
+      "id": "teacher_tursunboy",
+      "fullName": "Tursunboy Habibullayev",
+      "subject": "Texnologiya",
+      "username": "tursunboy",
+      "password": "29maktab",
+      "createdAt": "2026-10-26"
+    },
+    {
+      "id": "teacher_karimova",
+      "fullName": "Karimova Ziyoda",
+      "subject": "Matematika",
+      "username": "karimova",
+      "password": "29maktab",
+      "createdAt": "2026-10-26"
+    },
+    {
+      "id": "teacher_1793268513658",
+      "fullName": "+998 778242012",
+      "subject": "Texnologiya",
+      "username": "ttt",
+      "password": "8m7n6b5v",
+      "createdAt": "2026-10-29"
+    }
+  ]
+}

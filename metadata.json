@@ -1,0 +1,6 @@
+{
+  "name": "29-Maktab Ta'lim va Multiplayer Platformasi",
+  "description": "29-sonli maktab o'quvchilari uchun interaktiv ta'lim, multiplayer viktorinalar, o'qituvchilarni baholash va o'quvchi profili platformasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
