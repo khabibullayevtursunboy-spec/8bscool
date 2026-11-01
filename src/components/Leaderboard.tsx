@@ -1,304 +1,194 @@
-import React, { useMemo, useState } from 'react';
-import type { User } from '../types';
+import React, { useState } from 'react';
+import { User } from '../types';
 import { StorageService } from '../services/storage';
-import {
-  Trophy,
-  Coins,
-  Award,
-  Crown,
-  Flame,
-  Sparkles,
-  Medal,
-  Star,
-  TrendingUp,
-  Users,
-  Zap,
-  ChevronUp,
-  Target,
-  ShieldCheck,
-} from 'lucide-react';
+import { Trophy, Coins, Award, Crown, Medal, User as UserIcon } from 'lucide-react';
 
 interface LeaderboardProps {
   currentUser: User | null;
   onOpenProfile: () => void;
 }
 
-type Metric = 'xp' | 'coins';
-
-const formatNumber = (value: number) =>
-  new Intl.NumberFormat('uz-UZ').format(Number(value) || 0);
-
-export const Leaderboard: React.FC<LeaderboardProps> = ({
-  currentUser,
-  onOpenProfile,
-}) => {
-  const [metric, setMetric] = useState<Metric>('xp');
+export const Leaderboard: React.FC<LeaderboardProps> = ({ currentUser }) => {
+  const [metric, setMetric] = useState<'xp' | 'coins'>('xp');
   const users = StorageService.getUsers();
 
-  const sortedUsers = useMemo(
-    () =>
-      [...users].sort((a, b) => {
-        const difference =
-          metric === 'xp' ? (b.xp || 0) - (a.xp || 0) : (b.coins || 0) - (a.coins || 0);
-        return difference || a.fullName.localeCompare(b.fullName);
-      }),
-    [users, metric]
-  );
+  const sortedUsers = [...users].sort((a, b) => {
+    if (metric === 'xp') return b.xp - a.xp;
+    return b.coins - a.coins;
+  });
 
-  const topThree = sortedUsers.slice(0, 3);
-  const currentIndex = sortedUsers.findIndex((user) => user.id === currentUser?.id);
-  const currentRank = currentIndex >= 0 ? currentIndex + 1 : null;
-  const totalXp = users.reduce((sum, user) => sum + (user.xp || 0), 0);
-  const totalCoins = users.reduce((sum, user) => sum + (user.coins || 0), 0);
-
-  const renderAvatar = (user: User, size: 'small' | 'large' = 'small') => {
-    const dimension = size === 'large' ? 'h-full w-full' : 'h-full w-full';
+  const renderAvatar = (user: User) => {
     if (user.avatar) {
-      return (
-        <img
-          src={user.avatar}
-          alt={`${user.fullName} avatari`}
-          className={`${dimension} object-cover`}
-        />
-      );
+      return <img src={user.avatar} alt={user.fullName} className="w-full h-full object-cover" />;
     }
-    return (
-      <span className="flex h-full w-full items-center justify-center">
-        {(user.fullName || '?').trim().slice(0, 2).toUpperCase()}
-      </span>
-    );
+    return <span>{user.fullName.slice(0, 2).toUpperCase()}</span>;
   };
 
-  const scoreOf = (user: User) =>
-    metric === 'xp' ? `${formatNumber(user.xp)} XP` : `${formatNumber(user.coins)} COIN`;
-
-  const podiumStyles = [
-    {
-      rank: 2,
-      shell: 'leaderboard-second',
-      avatar: 'border-slate-300/70 shadow-slate-400/10',
-      medal: 'bg-gradient-to-br from-slate-200 to-slate-400 text-slate-900',
-      label: 'KUMUSH',
-      icon: Medal,
-    },
-    {
-      rank: 1,
-      shell: 'leaderboard-first',
-      avatar: 'border-amber-300 shadow-amber-400/20',
-      medal: 'bg-gradient-to-br from-amber-200 via-amber-400 to-orange-500 text-amber-950',
-      label: 'CHEMPION',
-      icon: Crown,
-    },
-    {
-      rank: 3,
-      shell: 'leaderboard-third',
-      avatar: 'border-orange-500/70 shadow-orange-500/10',
-      medal: 'bg-gradient-to-br from-orange-500 to-amber-800 text-white',
-      label: 'BRONZA',
-      icon: Award,
-    },
-  ];
-
-  const podiumUsers = [topThree[1], topThree[0], topThree[2]];
-
   return (
-    <div className="leaderboard-page animate-fadeIn space-y-7 pb-24">
-      {/* HERO */}
-      <section className="leaderboard-hero relative isolate overflow-hidden rounded-[30px] sm:rounded-[36px]">
-        <div className="leaderboard-orb leaderboard-orb-one" />
-        <div className="leaderboard-orb leaderboard-orb-two" />
-        <div className="leaderboard-grid-pattern" />
-        <div className="leaderboard-hero-content relative z-10">
-          <div className="leaderboard-kicker">
-            <span className="leaderboard-kicker-icon"><Sparkles className="h-3.5 w-3.5" /></span>
-            29-MAKTAB • NEXUS ARENA
-          </div>
-          <div className="max-w-3xl">
-            <p className="leaderboard-overline">BILIM. MAHORAT. G‘ALABA.</p>
-            <h1 className="leaderboard-title">
-              PESHQADAMLAR
-              <span> REYTINGI</span>
-            </h1>
-            <p className="leaderboard-description">
-              Har bir to‘g‘ri javob, har bir duel va har bir yutuq seni yuqoriga olib chiqadi.
-              O‘z natijangni kuzat va keyingi marrani zabt et!
-            </p>
-          </div>
-          <div className="leaderboard-hero-bottom">
-            <div className="leaderboard-live-tag"><span /> REYTING YANGILANIB BORADI</div>
-            {currentUser && (
-              <button type="button" onClick={onOpenProfile} className="leaderboard-my-profile">
-                Profilimni ko‘rish <ChevronUp className="h-4 w-4 rotate-90" />
-              </button>
-            )}
-          </div>
+    <div className="space-y-6 animate-fadeIn pb-16">
+      {/* Top Banner */}
+      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 rounded-3xl p-6 sm:p-8 text-white shadow-md">
+        <div className="max-w-2xl">
+          <span className="text-xs font-semibold uppercase tracking-wider text-amber-200">
+            Intellektual Reyting
+          </span>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-white mt-1 mb-2">
+            29-Maktab Peshqadamlari
+          </h2>
+          <p className="text-xs sm:text-sm text-amber-100/90 leading-relaxed">
+            Viktorinalar, 1v1 multiplayer janglar va o'qituvchilarni xolis baholash orqali to'plangan umumiy natijalar bo'yicha maktabimizning eng faol o'quvchilari!
+          </p>
         </div>
-        <div className="leaderboard-hero-emblem" aria-hidden="true">
-          <div className="leaderboard-emblem-ring">
-            <div className="leaderboard-emblem-core"><Trophy className="h-14 w-14 sm:h-20 sm:w-20" /></div>
-          </div>
-          <span className="leaderboard-emblem-star star-a"><Star /></span>
-          <span className="leaderboard-emblem-star star-b"><Sparkles /></span>
-        </div>
-      </section>
+      </div>
 
-      {/* OVERVIEW */}
-      <section className="leaderboard-stats-grid">
-        <div className="leaderboard-stat-card">
-          <span className="leaderboard-stat-icon violet"><Users /></span>
-          <div><p>Faol o‘quvchilar</p><strong>{formatNumber(users.length)}</strong></div>
-          <span className="leaderboard-stat-note">ishtirokchi</span>
-        </div>
-        <div className="leaderboard-stat-card">
-          <span className="leaderboard-stat-icon cyan"><Zap /></span>
-          <div><p>Jami tajriba</p><strong>{formatNumber(totalXp)}</strong></div>
-          <span className="leaderboard-stat-note">XP to‘plangan</span>
-        </div>
-        <div className="leaderboard-stat-card">
-          <span className="leaderboard-stat-icon amber"><Coins /></span>
-          <div><p>Jami mukofot</p><strong>{formatNumber(totalCoins)}</strong></div>
-          <span className="leaderboard-stat-note">coin yig‘ilgan</span>
-        </div>
-      </section>
-
-      {/* CURRENT USER CARD */}
-      {currentUser && (
-        <section className="leaderboard-you-card">
-          <div className="leaderboard-you-symbol"><Target className="h-5 w-5" /></div>
-          <div className="min-w-0 flex-1">
-            <p>SENING NATIJANG</p>
-            <h3>{currentUser.fullName}</h3>
-            <span>{currentUser.grade || 'O‘quvchi'} • {formatNumber(currentUser.xp)} XP</span>
-          </div>
-          <div className="leaderboard-you-rank">
-            <span>O‘RIN</span>
-            <strong>{currentRank ? `#${currentRank}` : '—'}</strong>
-          </div>
-          <button type="button" onClick={onOpenProfile} className="leaderboard-you-action">
-            <ChevronUp className="h-4 w-4 rotate-90" />
-          </button>
-        </section>
-      )}
-
-      {/* SELECTOR */}
-      <section className="leaderboard-section-heading">
-        <div>
-          <div className="leaderboard-section-eyebrow"><TrendingUp className="h-3.5 w-3.5" /> GLOBAL STANDINGS</div>
-          <h2>Eng faol o‘yinchilar</h2>
-          <p>Natijalarni XP yoki coin bo‘yicha saralang</p>
-        </div>
-        <div className="leaderboard-switch" role="group" aria-label="Reyting turini tanlash">
+      {/* Metric Selector Buttons */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
           <button
-            type="button"
             onClick={() => setMetric('xp')}
-            className={metric === 'xp' ? 'active' : ''}
-            aria-pressed={metric === 'xp'}
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
+              metric === 'xp'
+                ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+            }`}
           >
-            <Award className="h-4 w-4" /> XP reyting
+            <Award className="w-3.5 h-3.5" />
+            Eng Yuqori XP & Daraja
           </button>
           <button
-            type="button"
             onClick={() => setMetric('coins')}
-            className={metric === 'coins' ? 'active' : ''}
-            aria-pressed={metric === 'coins'}
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
+              metric === 'coins'
+                ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+            }`}
           >
-            <Coins className="h-4 w-4" /> Coin reyting
+            <Coins className="w-3.5 h-3.5" />
+            Eng Ko'p Coinlar
           </button>
         </div>
-      </section>
 
-      {/* PODIUM */}
-      {topThree.length > 0 && (
-        <section className="leaderboard-podium-wrap">
-          <div className="leaderboard-podium-heading">
-            <span className="leaderboard-podium-heading-icon"><Crown className="h-4 w-4" /></span>
-            TOP {Math.min(topThree.length, 3)} • SHOH SUPASI
+        <span className="text-xs text-slate-500 hidden sm:inline">
+          Jami faol o'quvchilar: {users.length} nafar
+        </span>
+      </div>
+
+      {/* Podium Top 3 */}
+      {sortedUsers.length >= 3 && (
+        <div className="grid grid-cols-3 gap-3 md:gap-6 pt-4 pb-2 items-end">
+          {/* Rank 2 */}
+          <div className="p-4 md:p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-xs flex flex-col items-center">
+            <div className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-bold text-xs text-slate-700 dark:text-slate-300 mb-2">
+              2
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-blue-600 text-white overflow-hidden flex items-center justify-center font-bold text-sm mb-2">
+              {renderAvatar(sortedUsers[1])}
+            </div>
+            <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white truncate max-w-[120px]">
+              {sortedUsers[1].fullName}
+            </h4>
+            <span className="text-xs text-slate-500 mb-2">{sortedUsers[1].grade}</span>
+            <div className="font-mono font-bold text-xs text-blue-600 dark:text-blue-400">
+              {metric === 'xp' ? `${sortedUsers[1].xp} XP` : `${sortedUsers[1].coins} Coin`}
+            </div>
           </div>
-          <div className="leaderboard-podium">
-            {podiumUsers.map((user, index) => {
-              if (!user) return <div key={`empty-${index}`} className="leaderboard-podium-empty" />;
-              const style = podiumStyles[index];
-              const Icon = style.icon;
-              const isMe = currentUser?.id === user.id;
-              return (
-                <article key={user.id} className={`leaderboard-podium-card ${style.shell} ${isMe ? 'is-me' : ''}`}>
-                  <div className={`leaderboard-podium-medal ${style.medal}`}>
-                    {index === 1 ? <Crown className="h-5 w-5 fill-current" /> : <Icon className="h-4 w-4" />}
-                  </div>
-                  <div className={`leaderboard-podium-avatar ${style.avatar}`}>
-                    {renderAvatar(user, 'large')}
-                  </div>
-                  <div className="leaderboard-podium-rank">0{style.rank}</div>
-                  <h3 title={user.fullName}>{user.fullName}</h3>
-                  <p>{user.grade || 'O‘quvchi'}</p>
-                  <div className="leaderboard-podium-score">{scoreOf(user)}</div>
-                  <span className="leaderboard-podium-label">{style.label}</span>
-                  {isMe && <span className="leaderboard-me-chip">BU SIZ</span>}
-                </article>
-              );
-            })}
+
+          {/* Rank 1 */}
+          <div className="p-5 md:p-8 bg-gradient-to-b from-amber-50 to-white dark:from-amber-950/20 dark:to-slate-900 rounded-3xl border-2 border-amber-400 dark:border-amber-600/60 text-center shadow-md flex flex-col items-center -translate-y-2">
+            <div className="w-9 h-9 rounded-full bg-amber-400 text-amber-950 flex items-center justify-center font-extrabold text-sm mb-2 shadow-sm">
+              <Crown className="w-5 h-5 fill-amber-950" />
+            </div>
+            <div className="w-14 h-14 rounded-2xl bg-amber-500 text-white overflow-hidden flex items-center justify-center font-bold text-base mb-2 shadow-sm">
+              {renderAvatar(sortedUsers[0])}
+            </div>
+            <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate max-w-[140px]">
+              {sortedUsers[0].fullName}
+            </h4>
+            <span className="text-xs text-slate-500 mb-2 font-medium">{sortedUsers[0].grade}</span>
+            <div className="font-mono font-extrabold text-sm sm:text-base text-amber-600 dark:text-amber-400">
+              {metric === 'xp' ? `${sortedUsers[0].xp} XP` : `${sortedUsers[0].coins} Coin`}
+            </div>
           </div>
-          <div className="leaderboard-podium-base"><span>THE NEXUS CHAMPIONS</span></div>
-        </section>
+
+          {/* Rank 3 */}
+          <div className="p-4 md:p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-xs flex flex-col items-center">
+            <div className="w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300 flex items-center justify-center font-bold text-xs mb-2">
+              3
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-indigo-600 text-white overflow-hidden flex items-center justify-center font-bold text-sm mb-2">
+              {renderAvatar(sortedUsers[2])}
+            </div>
+            <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white truncate max-w-[120px]">
+              {sortedUsers[2].fullName}
+            </h4>
+            <span className="text-xs text-slate-500 mb-2">{sortedUsers[2].grade}</span>
+            <div className="font-mono font-bold text-xs text-blue-600 dark:text-blue-400">
+              {metric === 'xp' ? `${sortedUsers[2].xp} XP` : `${sortedUsers[2].coins} Coin`}
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* FULL LIST */}
-      <section className="leaderboard-list-panel">
-        <div className="leaderboard-list-header">
-          <div>
-            <div className="leaderboard-section-eyebrow"><ShieldCheck className="h-3.5 w-3.5" /> TO‘LIQ JADVAL</div>
-            <h2>Barcha ishtirokchilar</h2>
-          </div>
-          <span className="leaderboard-count">{sortedUsers.length} ta o‘quvchi</span>
-        </div>
+      {/* Leaderboard Table */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          {sortedUsers.map((user, index) => {
+            const isMe = currentUser?.id === user.id;
 
-        {sortedUsers.length === 0 ? (
-          <div className="leaderboard-empty">
-            <span><Trophy className="h-8 w-8" /></span>
-            <h3>Reyting hozircha bo‘sh</h3>
-            <p>Birinchi bo‘lib o‘yin yoki testda qatnashing!</p>
-          </div>
-        ) : (
-          <div className="leaderboard-table">
-            <div className="leaderboard-table-labels">
-              <span>O‘RIN</span><span>ISHTIROKCHI</span><span>{metric === 'xp' ? 'TAJRIBA' : 'COIN'}</span>
-            </div>
-            {sortedUsers.map((user, index) => {
-              const isMe = currentUser?.id === user.id;
-              const isTop = index < 3;
-              return (
-                <article key={user.id} className={`leaderboard-row ${isMe ? 'is-me' : ''}`}>
-                  <div className={`leaderboard-row-rank rank-${index + 1}`}>
-                    {index === 0 ? <Crown className="h-4 w-4" /> : `#${index + 1}`}
+            return (
+              <div
+                key={user.id}
+                className={`p-4 flex items-center justify-between gap-4 transition-colors ${
+                  isMe ? 'bg-blue-50/70 dark:bg-blue-950/40' : 'hover:bg-slate-50 dark:hover:bg-slate-850'
+                }`}
+              >
+                <div className="flex items-center gap-3.5 min-w-0">
+                  <span className="font-mono font-bold text-sm text-slate-400 w-6 text-center shrink-0">
+                    #{index + 1}
+                  </span>
+
+                  <div className="w-9 h-9 rounded-xl bg-blue-600 text-white overflow-hidden flex items-center justify-center text-xs font-bold shrink-0">
+                    {renderAvatar(user)}
                   </div>
-                  <div className="leaderboard-row-person">
-                    <div className={`leaderboard-row-avatar ${isTop ? `top-${index + 1}` : ''}`}>
-                      {renderAvatar(user)}
+
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-sm text-slate-900 dark:text-white truncate">
+                        {user.fullName}
+                      </span>
+                      {isMe && (
+                        <span className="text-[10px] font-bold bg-blue-600 text-white px-1.5 py-0.5 rounded">
+                          Siz
+                        </span>
+                      )}
                     </div>
-                    <div className="min-w-0">
-                      <div className="leaderboard-row-name">
-                        <strong title={user.fullName}>{user.fullName}</strong>
-                        {isMe && <span className="leaderboard-you-tag">SIZ</span>}
-                      </div>
-                      <div className="leaderboard-row-meta">
-                        <span>{user.grade || 'O‘quvchi'}</span>
-                        <i />
-                        <span>{user.badges?.length || 0} nishon</span>
-                        {(user.stats?.duelsWon || 0) > 0 && <><i /><span className="leaderboard-wins"><Flame className="h-3 w-3" /> {user.stats.duelsWon} g‘alaba</span></>}
-                      </div>
+                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      <span>{user.grade}</span>
+                      <span>•</span>
+                      <span>{user.badges.length} ta nishon</span>
+                      {user.stats?.duelsWon > 0 && (
+                        <>
+                          <span>•</span>
+                          <span>{user.stats.duelsWon} ta g'alaba</span>
+                        </>
+                      )}
                     </div>
                   </div>
-                  <div className="leaderboard-row-score">
-                    <strong>{scoreOf(user)}</strong>
-                    <span>{metric === 'xp' ? `Daraja ${user.level || 1}` : `${formatNumber(user.xp)} XP`}</span>
+                </div>
+
+                <div className="text-right shrink-0">
+                  <div className="font-mono font-bold text-sm text-slate-900 dark:text-white">
+                    {metric === 'xp' ? `${user.xp} XP` : `${user.coins} Coin`}
                   </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
-      </section>
-      <p className="leaderboard-footnote"><Sparkles className="h-3.5 w-3.5" /> Har bir kichik yutuq katta natijaning boshlanishidir.</p>
+                  <div className="text-[11px] text-slate-400">
+                    {metric === 'xp' ? `Daraja ${user.level}` : `${user.xp} XP`}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
