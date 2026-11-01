@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import schoolHeroBanner from './assets/images/school_hero_banner_1793015711991.jpg';
 import { User, TeacherAccount, SiteSettings, Announcement, TestQuestion } from './types';
 import { StorageService } from './services/storage';
@@ -46,6 +46,7 @@ import {
   Flame,
   Rocket,
   Puzzle,
+  RefreshCw,
   type LucideIcon
 } from 'lucide-react';
 
@@ -164,6 +165,33 @@ const FEATURE_CARDS: FeatureCard[] = [
 
 const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
+/* ---------- Kunlik savol: har bir foydalanuvchi yechgan savollarni eslab qolish ---------- */
+const solvedStorageKey = (userId: unknown) => `daily_solved_${String(userId)}`;
+
+const questionKey = (q: TestQuestion): string => {
+  const id = (q as unknown as { id?: string | number }).id;
+  return id !== undefined && id !== null ? `id:${id}` : `q:${q.question}`;
+};
+
+const getSolvedSet = (userId: unknown): Set<string> => {
+  try {
+    const raw = localStorage.getItem(solvedStorageKey(userId));
+    return new Set<string>(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set<string>();
+  }
+};
+
+const markSolved = (userId: unknown, key: string) => {
+  try {
+    const set = getSolvedSet(userId);
+    set.add(key);
+    localStorage.setItem(solvedStorageKey(userId), JSON.stringify(Array.from(set)));
+  } catch {
+    /* localStorage yopiq bo'lsa e'tibor bermaymiz */
+  }
+};
+
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [settings, setSettings] = useState<SiteSettings>(StorageService.getSettings());
@@ -188,6 +216,9 @@ export default function App() {
   const [dailySelectedOpt, setDailySelectedOpt] = useState<number | null>(null);
   const [dailyResult, setDailyResult] = useState<'correct' | 'wrong' | null>(null);
   const [dailyAnswered, setDailyAnswered] = useState(false);
+  const [dailyStatus, setDailyStatus] = useState<'playing' | 'all_done' | 'empty'>('playing');
+  const [dailyProgress, setDailyProgress] = useState({ solved: 0, total: 0 });
+  const lastDailyKey = useRef<string | null>(null);
 
   useEffect(() => {
     StorageService.init();
@@ -252,13 +283,43 @@ export default function App() {
 
   const [currentDailyQ, setCurrentDailyQ] = useState<TestQuestion | null>(null);
 
-  useEffect(() => {
-    const questions = StorageService.getQuestions();
-    if (questions.length > 0) {
-      const raw = questions[dailyQIndex % questions.length];
-      setCurrentDailyQ(StorageService.shuffleQuestionOptions(raw));
+  // Foydalanuvchi hali to'g'ri yechmagan savollardan bittasini tanlaydi
+  const loadDailyQuestion = (userId: unknown) => {
+    setDailySelectedOpt(null);
+    setDailyResult(null);
+    setDailyAnswered(false);
+
+    const all = StorageService.getQuestions();
+    if (all.length === 0) {
+      setCurrentDailyQ(null);
+      setDailyStatus('empty');
+      setDailyProgress({ solved: 0, total: 0 });
+      return;
     }
-  }, [dailyQIndex]);
+
+    const solved = getSolvedSet(userId);
+    const pool = all.filter((q) => !solved.has(questionKey(q)));
+    setDailyProgress({ solved: all.length - pool.length, total: all.length });
+
+    if (pool.length === 0) {
+      setCurrentDailyQ(null);
+      setDailyStatus('all_done');
+      return;
+    }
+
+    setDailyStatus('playing');
+    // Xato yechilgan savol darhol qaytib kelmasligi uchun avvalgisini chetlab o'tamiz
+    const candidates =
+      pool.length > 1 ? pool.filter((q) => questionKey(q) !== lastDailyKey.current) : pool;
+    const raw = candidates[Math.floor(Math.random() * candidates.length)];
+    lastDailyKey.current = questionKey(raw);
+    setCurrentDailyQ(StorageService.shuffleQuestionOptions(raw));
+  };
+
+  useEffect(() => {
+    if (!currentUser) return;
+    loadDailyQuestion(currentUser.id);
+  }, [dailyQIndex, currentUser?.id]);
 
   const handleDailyAnswer = (index: number) => {
     if (dailyAnswered || !currentDailyQ) return;
@@ -268,6 +329,9 @@ export default function App() {
     if (index === currentDailyQ.correctIndex) {
       setDailyResult('correct');
       if (currentUser) {
+        // To'g'ri yechilgan savol shu foydalanuvchiga endi chiqmaydi
+        if (lastDailyKey.current) markSolved(currentUser.id, lastDailyKey.current);
+        setDailyProgress((p) => ({ ...p, solved: Math.min(p.total, p.solved + 1) }));
         StorageService.addCoinsAndXp(currentUser.id, 25, 30);
         handleUserStatsUpdated();
       }
@@ -287,10 +351,8 @@ export default function App() {
     setSettings(StorageService.getSettings());
     setAnnouncements(StorageService.getAnnouncements());
     setCurrentUser(StorageService.getCurrentUser());
-    const questions = StorageService.getQuestions();
-    if (questions.length > 0) {
-      setCurrentDailyQ(StorageService.shuffleQuestionOptions(questions[dailyQIndex % questions.length]));
-    }
+    const uid = StorageService.getCurrentUser()?.id ?? currentUser?.id;
+    if (uid !== undefined) loadDailyQuestion(uid);
     window.dispatchEvent(new Event('admin_data_updated'));
   };
 
@@ -632,8 +694,44 @@ export default function App() {
               </button>
             </div>
 
+            {/* Savollar tugagan yoki umuman yo'q holat */}
+            {dailyStatus !== 'playing' && (
+              <div className="neon-card p-6 sm:p-10 text-center">
+                <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 text-white grid place-items-center shadow-xl shadow-orange-500/30 animate-float mb-5">
+                  <Trophy className="w-10 h-10" />
+                </div>
+                <h3 className="font-display font-black text-2xl sm:text-3xl text-slate-900 dark:text-white">
+                  {dailyStatus === 'all_done' ? 'Barcha testlarni yechdingiz! 🎉' : "Hozircha test yo'q"}
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400 font-medium mt-2 max-w-md mx-auto leading-relaxed">
+                  {dailyStatus === 'all_done'
+                    ? "Zo'r natija! Admin yangi test qo'shishini kuting. Yangi savol paydo bo'lishi bilan shu yerda ko'rasiz."
+                    : "Admin test qo'shishini kuting."}
+                </p>
+
+                {dailyStatus === 'all_done' && (
+                  <div className="max-w-xs mx-auto mt-5">
+                    <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1.5">
+                      <span>Yechilgan savollar</span>
+                      <span className="font-mono">{dailyProgress.solved} / {dailyProgress.total}</span>
+                    </div>
+                    <div className="xp-bar"><span style={{ width: '100%' }} /></div>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setDailyQIndex((prev) => prev + 1)}
+                  className="btn-gradient mt-6"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Yangi test bormi? Tekshirish
+                </button>
+              </div>
+            )}
+
             {/* Daily Challenge Interactive Box */}
-            {currentDailyQ && (
+            {dailyStatus === 'playing' && currentDailyQ && (
               <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-950 text-white p-6 sm:p-9 shadow-2xl shadow-indigo-900/30 border border-indigo-400/20">
                 {/* Dekorativ yorug'lik dog'lari */}
                 <div className="pointer-events-none absolute -top-24 -right-16 w-72 h-72 rounded-full bg-fuchsia-500/20 blur-3xl" />
@@ -663,6 +761,21 @@ export default function App() {
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     )}
+                  </div>
+                </div>
+
+                {/* Yechilgan savollar jarayoni */}
+                <div className="relative mb-5">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-blue-200 mb-1.5">
+                    <span>Yechilgan savollar</span>
+                    <span className="font-mono">{dailyProgress.solved} / {dailyProgress.total}</span>
+                  </div>
+                  <div className="xp-bar">
+                    <span
+                      style={{
+                        width: `${dailyProgress.total ? (dailyProgress.solved / dailyProgress.total) * 100 : 0}%`
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -728,6 +841,11 @@ export default function App() {
                         <span className="font-bold text-amber-300 shrink-0">Izoh:</span>
                         <span>{currentDailyQ.explanation}</span>
                       </div>
+                      <p className="mt-3 text-[11px] font-bold text-slate-300">
+                        {dailyResult === 'correct'
+                          ? '✅ Bu savol endi sizga qayta chiqmaydi.'
+                          : "🔁 Bu savol keyinroq yana chiqadi, qayta urinib ko'ring!"}
+                      </p>
                     </div>
                   )}
                 </div>
