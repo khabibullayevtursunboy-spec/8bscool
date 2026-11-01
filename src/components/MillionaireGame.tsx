@@ -8,7 +8,10 @@ import {
   ShieldAlert, 
   XCircle, 
   CheckCircle2, 
-  Clock 
+  Clock,
+  Zap,
+  Sparkles,
+  Users
 } from 'lucide-react';
 
 interface MillionaireGameProps {
@@ -57,7 +60,7 @@ export const MillionaireGame: React.FC<MillionaireGameProps> = ({ currentUser, o
           const hours = Math.floor(remainingMs / (1000 * 60 * 60));
           const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
           const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
-          setTimeLeftStr(`${hours} soat ${minutes} daq ${seconds} son`);
+          setTimeLeftStr(`${hours}h ${minutes}m ${seconds}s`);
         } else {
           localStorage.removeItem(getLockKey());
           setIsLocked(false);
@@ -131,7 +134,8 @@ export const MillionaireGame: React.FC<MillionaireGameProps> = ({ currentUser, o
 
   const handleAudienceHelp = () => {
     if (audienceHelp || isAnswered || isLocked) return;
-    const correctLetter = ['A', 'B', 'C', 'D'][currentQ.correctIndex];
+    const optionLetters = ['A', 'B', 'C', 'D'];
+    const correctLetter = optionLetters[currentQ.correctIndex];
     setAudienceHelp(`Zal muxlislarining 78%i "${correctLetter}" javobiga ovoz berishdi!`);
   };
 
@@ -147,159 +151,191 @@ export const MillionaireGame: React.FC<MillionaireGameProps> = ({ currentUser, o
     setAudienceHelp(null);
   };
 
+  const optionLabels = ['A', 'B', 'C', 'D'];
+
   return (
-    <div className="space-y-6 sm:space-y-8 animate-fadeIn max-w-4xl mx-auto">
-      {/* Banner */}
-      <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-700 text-white border border-white/20 shadow-2xl">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-56 h-56 bg-yellow-300/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="space-y-2 text-center sm:text-left">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-bold text-yellow-100">
-              <Trophy className="w-3.5 h-3.5 text-yellow-300" />
-              <span>Intellektual Shou</span>
+    <div className="space-y-4 sm:space-y-6 animate-fadeIn max-w-4xl mx-auto px-2 sm:px-4 pb-12 select-none">
+      
+      {/* 3D Banner Header */}
+      <div className="relative overflow-hidden rounded-[2.5rem] p-5 sm:p-8 bg-gradient-to-b from-amber-500 via-amber-600 to-orange-700 text-white border-4 border-amber-300/40 shadow-[0_12px_35px_rgba(245,158,11,0.4)]">
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 sm:w-64 sm:h-64 bg-yellow-200/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400/20 via-transparent to-black/30 pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-5">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-yellow-300/40 text-[11px] font-extrabold text-yellow-300 shadow-inner">
+              <Trophy className="w-3.5 h-3.5 text-yellow-400 animate-bounce" />
+              <span>3D INTELLEKTUAL ARENA</span>
             </div>
-            <h2 className="font-display font-black text-2xl sm:text-3xl text-white tracking-tight">
-              Kim Millioner?
+            <h2 className="font-display font-black text-2xl sm:text-4xl text-white tracking-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
+              KIM MILLIONER?
             </h2>
-            <p className="text-xs sm:text-sm text-yellow-100/90 font-medium">
-              5-qadamga yetib keling va bosh mukofotni qo'lga kiriting!
+            <p className="text-xs sm:text-sm text-amber-100/90 font-bold max-w-xs sm:max-w-md">
+              Barcha 5 ta bosqichni muvaffaqiyatli bosib o'ting va bosh mukofotni qo'lga kiriting!
             </p>
           </div>
 
-          <div className="flex sm:flex-col gap-1.5 bg-black/20 backdrop-blur-md p-3 rounded-2xl border border-white/10">
-            {PRIZE_LADDER.slice().reverse().map((item, idx) => {
-              const actualIdx = PRIZE_LADDER.length - 1 - idx;
-              const isActive = actualIdx === currentLevel;
-              const isPassed = actualIdx < currentLevel;
+          {/* Mobile & Desktop 3D Prize Ladder */}
+          <div className="w-full sm:w-auto bg-black/40 backdrop-blur-xl p-3 rounded-2xl border border-yellow-400/30 shadow-[inset_0_2px_8px_rgba(0,0,0,0.6)]">
+            <div className="flex sm:flex-col gap-1.5 overflow-x-auto no-scrollbar py-0.5 justify-between">
+              {PRIZE_LADDER.slice().reverse().map((item, idx) => {
+                const actualIdx = PRIZE_LADDER.length - 1 - idx;
+                const isActive = actualIdx === currentLevel;
+                const isPassed = actualIdx < currentLevel;
 
-              return (
-                <div 
-                  key={item.level}
-                  className={`px-3 py-1 rounded-xl text-xs font-mono font-bold flex items-center justify-between gap-4 transition-all ${
-                    isActive ? 'bg-yellow-500 text-slate-950 scale-105 shadow-md' :
-                    isPassed ? 'bg-emerald-500/20 text-emerald-300 line-through' : 'text-yellow-200/60'
-                  }`}
-                >
-                  <span>{item.level}-Bosqich</span>
-                  <span>+{item.prize} Coin</span>
-                </div>
-              );
-            })}
+                return (
+                  <div 
+                    key={item.level}
+                    className={`px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-mono font-black flex items-center justify-between gap-3 shrink-0 transition-all duration-300 ${
+                      isActive 
+                        ? 'bg-gradient-to-r from-yellow-300 to-amber-400 text-slate-950 shadow-[0_4px_12px_rgba(250,204,21,0.5)] scale-105 border-2 border-white' 
+                        : isPassed 
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 line-through opacity-80' 
+                        : 'bg-white/5 text-amber-200/50 border border-white/5'
+                    }`}
+                  >
+                    <span className="flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-yellow-400" />
+                      {item.level}-Bosqich
+                    </span>
+                    <span>+{item.prize} Coin</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 8 SOATGA BLOKLANGAN XABARI */}
+      {/* 8 SOATGA BLOKLANGAN XABARI (3D Card) */}
       {isLocked ? (
-        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-amber-500/30 rounded-3xl p-8 text-center space-y-4 shadow-xl">
-          <div className="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-            <Clock className="w-8 h-8 animate-pulse" />
+        <div className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-4 border-amber-500/30 rounded-[2.5rem] p-6 sm:p-10 text-center space-y-5 shadow-[0_20px_50px_rgba(0,0,0,0.6)] animate-scaleUp">
+          <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-600 rounded-3xl flex items-center justify-center mx-auto shadow-[0_10px_25px_rgba(245,158,11,0.4)] border-2 border-yellow-200">
+            <Clock className="w-10 h-10 text-slate-950 animate-spin" style={{ animationDuration: '6s' }} />
           </div>
-          <h3 className="font-display font-black text-2xl text-slate-900 dark:text-white">
-            Siz 5-qadamga yetib keldingiz! 🏆
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium max-w-md mx-auto">
-            Bosh mukofotni yutib olganingiz uchun o'yin 8 soatga vaqtincha yopildi. Taymer tugagach, qayta o'ynashingiz mumkin.
-          </p>
-          <div className="inline-block px-6 py-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-600 dark:text-amber-400 font-mono font-bold text-sm">
-            Qayta ochilish vaqti: {timeLeftStr}
+          <div className="space-y-2">
+            <h3 className="font-display font-black text-2xl sm:text-3xl text-white drop-shadow-md">
+              Siz 5-qadamga yetib keldingiz! 🏆
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-md mx-auto leading-relaxed">
+              Bosh mukofotni yutib olganingiz uchun arena 8 soatga vaqtincha yopildi. Taymer tugagach, yana ishtirok etishingiz mumkin!
+            </p>
+          </div>
+          <div className="inline-block px-6 py-3.5 bg-slate-800/90 border-2 border-amber-500/50 rounded-2xl text-amber-400 font-mono font-black text-base shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]">
+            Qayta ochilish: <span className="text-white tracking-widest">{timeLeftStr}</span>
           </div>
         </div>
       ) : (
         <>
-          {/* Lifelines (Yordamchilar) */}
+          {/* Lifelines 3D Buttons */}
           {!gameOver && !gameWon && (
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
               <button
                 onClick={handleFiftyFifty}
                 disabled={fiftyFiftyUsed || isAnswered}
-                className="px-4 py-2 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-xs font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 disabled:opacity-40 transition-all shadow-xs cursor-pointer flex items-center gap-1.5"
+                className="flex-1 max-w-[160px] py-3 px-4 rounded-2xl bg-gradient-to-b from-indigo-500 to-indigo-700 active:translate-y-1 active:shadow-[0_2px_0_#312e81] border-b-4 border-indigo-900 text-white font-black text-xs sm:text-sm transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer flex items-center justify-center gap-2 shadow-[0_6px_0_#312e81]"
               >
-                <ShieldAlert className="w-4 h-4" />
+                <ShieldAlert className="w-4 h-4 text-indigo-200" />
                 <span>50 / 50</span>
               </button>
 
               <button
                 onClick={handleAudienceHelp}
                 disabled={!!audienceHelp || isAnswered}
-                className="px-4 py-2 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-xs font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 disabled:opacity-40 transition-all shadow-xs cursor-pointer flex items-center gap-1.5"
+                className="flex-1 max-w-[160px] py-3 px-4 rounded-2xl bg-gradient-to-b from-amber-500 to-amber-700 active:translate-y-1 active:shadow-[0_2px_0_#78350f] border-b-4 border-amber-900 text-white font-black text-xs sm:text-sm transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none cursor-pointer flex items-center justify-center gap-2 shadow-[0_6px_0_#78350f]"
               >
-                <HelpCircle className="w-4 h-4" />
+                <Users className="w-4 h-4 text-amber-200" />
                 <span>Zal Yordami</span>
               </button>
             </div>
           )}
 
           {audienceHelp && (
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-bold text-center animate-fadeIn">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold text-center shadow-lg animate-fadeIn">
               💡 {audienceHelp}
             </div>
           )}
 
-          {/* O'yin Kartasi */}
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl relative">
+          {/* Main 3D Game Stage Card */}
+          <div className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-4 border-slate-800 rounded-[2.5rem] p-5 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.6)] relative overflow-hidden">
+            
             {gameOver ? (
-              <div className="py-12 text-center space-y-4">
-                <div className="w-16 h-16 bg-rose-500/10 text-rose-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-                  <XCircle className="w-10 h-10" />
+              <div className="py-10 text-center space-y-5 animate-scaleUp">
+                <div className="w-20 h-20 bg-rose-500/20 text-rose-500 rounded-3xl flex items-center justify-center mx-auto border-2 border-rose-500/40 shadow-[0_10px_25px_rgba(244,63,94,0.3)]">
+                  <XCircle className="w-10 h-10 animate-bounce" />
                 </div>
-                <h3 className="font-display font-black text-2xl text-slate-900 dark:text-white">
-                  O'yin tugadi! Xato javob berdingiz.
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">
-                  Harakatni to'xtatmang, yana bir bor urinib ko'ring!
-                </p>
+                <div className="space-y-1">
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-white">
+                    O'yin tugadi!
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 font-medium">
+                    Noto'g'ri javob berildi. Bilimingizni oshirib qayta urinib ko'ring!
+                  </p>
+                </div>
                 <button
                   onClick={restartGame}
-                  className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs rounded-xl shadow-md hover:from-amber-600 hover:to-orange-600 transition-all cursor-pointer inline-flex items-center gap-2"
+                  className="px-7 py-3.5 bg-gradient-to-b from-amber-400 to-orange-600 active:translate-y-1 border-b-4 border-orange-800 text-slate-950 font-black text-xs sm:text-sm rounded-2xl shadow-[0_6px_0_#9a3412] hover:brightness-110 transition-all cursor-pointer inline-flex items-center gap-2"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  Qaytadan o'ynash
+                  <span>Qaytadan boshlash</span>
                 </button>
               </div>
             ) : gameWon ? (
-              <div className="py-12 text-center space-y-4">
-                <div className="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-                  <Trophy className="w-10 h-10 animate-bounce" />
+              <div className="py-10 text-center space-y-5 animate-scaleUp">
+                <div className="w-20 h-20 bg-gradient-to-br from-yellow-300 to-amber-500 rounded-3xl flex items-center justify-center mx-auto border-2 border-yellow-200 shadow-[0_10px_35px_rgba(250,204,21,0.5)]">
+                  <Trophy className="w-10 h-10 text-slate-950 animate-bounce" />
                 </div>
-                <h3 className="font-display font-black text-2xl text-slate-900 dark:text-white">
-                  Tabriklaymiz! Siz 5-qadamga yetdingiz! 🏆
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">
-                  Hisobingizga <span className="text-amber-500 font-bold">+{PRIZE_LADDER[PRIZE_LADDER.length - 1].prize} Coin</span> va <span className="text-blue-500 font-bold">+{PRIZE_LADDER[PRIZE_LADDER.length - 1].xp} XP</span> qo'shildi!
-                </p>
-                <p className="text-xs text-amber-600 dark:text-amber-400 font-bold">
-                  O'yin 8 soatga yopildi.
-                </p>
+                <div className="space-y-2">
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-white">
+                    G'ALABA! SIZ MILLIONER BO'LDINGIZ! 🏆
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 font-medium">
+                    Hisobingizga <span className="text-yellow-400 font-black">+{PRIZE_LADDER[PRIZE_LADDER.length - 1].prize} Coin</span> va <span className="text-blue-400 font-black">+{PRIZE_LADDER[PRIZE_LADDER.length - 1].xp} XP</span> qo'shildi!
+                  </p>
+                </div>
+                <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 font-extrabold text-xs">
+                  Arena 8 soatga yopildi. Keyingi o'yinlarda omad!
+                </div>
               </div>
             ) : (
               <div className="space-y-6">
-                <div className="flex items-center justify-between text-xs text-slate-500 font-bold border-b border-slate-100 dark:border-slate-800 pb-3">
-                  <span className="text-amber-600 dark:text-amber-400 bg-amber-500/10 px-3 py-1 rounded-lg">
+                
+                {/* Status Bar */}
+                <div className="flex items-center justify-between text-xs font-bold border-b border-slate-800 pb-3">
+                  <span className="text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/30 flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
                     Fan: {currentQ.subject}
                   </span>
-                  <span className="font-mono">
-                    Daraja: {currentLevel + 1} / {PRIZE_LADDER.length}
+                  <span className="font-mono text-slate-400">
+                    Bosqich: <span className="text-yellow-400 font-black">{currentLevel + 1}</span> / {PRIZE_LADDER.length}
                   </span>
                 </div>
 
-                <h3 className="font-display font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-relaxed">
-                  {currentQ.question}
-                </h3>
+                {/* 3D Question Card */}
+                <div className="p-5 sm:p-7 rounded-3xl bg-slate-800/80 border-2 border-slate-700/80 shadow-[inset_0_2px_8px_rgba(0,0,0,0.6)]">
+                  <h3 className="font-display font-bold text-base sm:text-xl text-white leading-relaxed text-center sm:text-left">
+                    {currentQ.question}
+                  </h3>
+                </div>
 
+                {/* 3D Options Hexagon Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {currentQ.options.map((opt, idx) => {
                     if (hiddenOptions.includes(idx)) {
-                      return <div key={idx} className="p-4 rounded-xl opacity-0 pointer-events-none" />;
+                      return <div key={idx} className="h-14 sm:h-16 opacity-0 pointer-events-none" />;
                     }
 
                     const isSelected = selectedOpt === idx;
                     const isCorrect = idx === currentQ.correctIndex;
 
-                    let btnStyle = 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-amber-500';
+                    let btn3DStyle = 'bg-slate-800/90 text-slate-200 border-b-4 border-slate-950 hover:border-amber-500 hover:text-white shadow-[0_4px_0_#020617]';
+                    
                     if (isAnswered) {
-                      if (isCorrect) btnStyle = 'bg-emerald-500 text-white border-emerald-600 font-bold shadow-md';
-                      else if (isSelected && !isCorrect) btnStyle = 'bg-rose-500 text-white border-rose-600';
+                      if (isCorrect) {
+                        btn3DStyle = 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-b-4 border-emerald-900 shadow-[0_4px_0_#064e3b] font-black scale-[1.02]';
+                      } else if (isSelected && !isCorrect) {
+                        btn3DStyle = 'bg-gradient-to-r from-rose-500 to-red-600 text-white border-b-4 border-rose-900 shadow-[0_4px_0_#881337]';
+                      }
                     }
 
                     return (
@@ -307,14 +343,22 @@ export const MillionaireGame: React.FC<MillionaireGameProps> = ({ currentUser, o
                         key={idx}
                         disabled={isAnswered}
                         onClick={() => handleAnswer(idx)}
-                        className={`p-4 rounded-2xl border text-left text-xs sm:text-sm font-semibold transition-all flex items-center justify-between cursor-pointer ${btnStyle}`}
+                        className={`h-14 sm:h-16 p-4 rounded-2xl border border-slate-700/60 text-left text-xs sm:text-sm font-semibold transition-all duration-150 flex items-center justify-between cursor-pointer active:translate-y-1 active:shadow-none ${btn3DStyle}`}
                       >
-                        <span>{opt}</span>
-                        {isAnswered && isCorrect && <CheckCircle2 className="w-4 h-4 text-white" />}
+                        <div className="flex items-center gap-3 truncate">
+                          <span className={`w-7 h-7 rounded-xl flex items-center justify-center font-black text-xs shrink-0 ${
+                            isAnswered && isCorrect ? 'bg-white/20 text-white' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                          }`}>
+                            {optionLabels[idx]}
+                          </span>
+                          <span className="truncate">{opt}</span>
+                        </div>
+                        {isAnswered && isCorrect && <CheckCircle2 className="w-5 h-5 text-white shrink-0 ml-2" />}
                       </button>
                     );
                   })}
                 </div>
+
               </div>
             )}
           </div>

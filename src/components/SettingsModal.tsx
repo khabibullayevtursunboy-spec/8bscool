@@ -13,7 +13,9 @@ import {
   KeyRound, 
   Sparkles,
   User as UserIcon,
-  Wrench
+  Wrench,
+  ChevronRight,
+  Flame
 } from 'lucide-react';
 
 interface SettingsModalProps {
@@ -105,23 +107,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn transition-all">
-      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] transition-all">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn transition-all select-none">
+      <div className="relative w-full max-w-md bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-4 border-slate-800 rounded-[2.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col max-h-[92vh] transition-all">
         
-        {/* Decorative background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-r from-blue-500/10 via-indigo-500/20 to-purple-500/10 blur-2xl pointer-events-none" />
+        {/* Orqa fon porlashi (3D Glow) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-40 bg-gradient-to-r from-blue-500/15 via-indigo-500/25 to-purple-500/15 blur-3xl pointer-events-none" />
 
-        {/* Header */}
-        <div className="relative p-5 sm:p-6 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between bg-gradient-to-b from-slate-50/80 to-white dark:from-slate-850 dark:to-slate-900">
+        {/* 3D Header */}
+        <div className="relative p-5 sm:p-6 border-b-2 border-slate-800 flex items-center justify-between bg-slate-900/90 backdrop-blur-xl">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-blue-500/20">
-              <Settings className="w-5 h-5 animate-spin-slow" />
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-700 text-white flex items-center justify-center shadow-[0_6px_15px_rgba(59,130,246,0.4)] border border-blue-400/40">
+              <Settings className="w-6 h-6 animate-spin-slow text-blue-100" />
             </div>
             <div>
-              <h3 className="font-display font-black text-base sm:text-lg text-slate-900 dark:text-white leading-tight tracking-tight">
+              <h3 className="font-display font-black text-base sm:text-lg text-white leading-tight tracking-tight">
                 Sozlamalar & Promokod
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-xs text-blue-400 font-bold">
                 8-Sinf Texnologiya fani portali
               </p>
             </div>
@@ -130,7 +132,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Yopish"
-            className="p-2 rounded-2xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer hover:rotate-90 duration-200"
+            className="p-2.5 rounded-2xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all cursor-pointer hover:rotate-90 duration-200 shadow-inner border border-slate-700"
           >
             <X className="w-5 h-5" />
           </button>
@@ -139,17 +141,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         {/* Content Body */}
         <div className="p-5 space-y-4 overflow-y-auto custom-scrollbar">
 
-          {/* Theme Mode Switcher */}
-          <div className="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60 flex items-center justify-between shadow-xs hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+          {/* Theme Mode Switcher 3D Card */}
+          <div className="p-4 rounded-2xl bg-slate-800/70 border-2 border-slate-700/80 flex items-center justify-between shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:border-blue-500/50 transition-all">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shadow-xs">
-                {theme === 'dark' ? <Moon className="w-5 h-5 text-blue-400" /> : <Sun className="w-5 h-5 text-amber-500" />}
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shadow-inner border border-amber-500/30">
+                {theme === 'dark' ? <Moon className="w-5 h-5 text-blue-400" /> : <Sun className="w-5 h-5 text-amber-400" />}
               </div>
               <div>
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                <h4 className="text-xs font-black text-white">
                   Sayt Rejimi (Mavzu)
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <p className="text-[11px] text-slate-400 font-medium">
                   {theme === 'dark' ? 'Kechgi rejim (qorong\'i)' : 'Kunduzgi rejim (yorug\')'}
                 </p>
               </div>
@@ -157,24 +159,24 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
             <button
               onClick={toggleTheme}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 transition-all cursor-pointer shadow-xs active:scale-95"
+              className="px-4 py-2.5 rounded-xl text-xs font-black bg-gradient-to-b from-slate-700 to-slate-800 active:translate-y-0.5 border-b-2 border-slate-950 text-white hover:brightness-110 transition-all cursor-pointer shadow-[0_4px_0_#020617]"
             >
               {theme === 'dark' ? 'Kunduzgiga' : 'Kechgiga'}
             </button>
           </div>
 
-          {/* Promocode Activation Box */}
-          <div className="p-4.5 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-200/80 dark:border-indigo-900/40 shadow-xs">
+          {/* Promocode Activation Box 3D */}
+          <div className="p-4.5 rounded-2xl bg-gradient-to-br from-indigo-950/60 via-purple-950/40 to-slate-900 border-2 border-indigo-500/40 shadow-[0_8px_20px_rgba(99,102,241,0.15)]">
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-1.5 bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 rounded-lg">
+              <div className="p-1.5 bg-indigo-500/20 text-indigo-400 rounded-lg border border-indigo-500/30">
                 <Gift className="w-4 h-4" />
               </div>
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+              <h4 className="text-xs font-black text-white">
                 Promokodni Faollashtirish
               </h4>
             </div>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mb-3.5 leading-relaxed font-medium">
-              Ustoz tomonidan berilgan maxsus promokodni kiriting va bepul **Coin & XP** ballariga ega bo'ling!
+            <p className="text-xs text-slate-300 mb-3.5 leading-relaxed font-medium">
+              Ustoz tomonidan berilgan maxsus promokodni kiriting va bepul <strong className="text-amber-400">Coin & XP</strong> ballariga ega bo'ling!
             </p>
 
             <form onSubmit={handleClaimPromo} className="flex gap-2">
@@ -183,98 +185,98 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 placeholder="MASALAN: TEXNO2026"
                 value={promoInput}
                 onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
-                className="flex-1 px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono font-bold tracking-wider uppercase text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all shadow-xs"
+                className="flex-1 px-3.5 py-3 bg-slate-900 border-2 border-slate-700 rounded-xl text-xs font-mono font-bold tracking-wider uppercase text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-[inset_0_2px_6px_rgba(0,0,0,0.5)]"
               />
               <button
                 type="submit"
-                className="px-4.5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer whitespace-nowrap active:scale-95"
+                className="px-4.5 py-3 bg-gradient-to-b from-indigo-500 to-purple-700 active:translate-y-0.5 border-b-4 border-indigo-950 hover:brightness-110 text-white rounded-xl text-xs font-black shadow-[0_4px_0_#312e81] transition-all cursor-pointer whitespace-nowrap"
               >
                 Faollashtirish
               </button>
             </form>
 
             {promoMsg && (
-              <div className={`mt-3 p-3 rounded-xl text-xs font-semibold flex items-center gap-2 animate-fadeIn ${
+              <div className={`mt-3 p-3 rounded-xl text-xs font-bold flex items-center gap-2 animate-fadeIn border-2 ${
                 promoMsg.type === 'success' 
-                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' 
-                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20'
+                  ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/40 shadow-[0_4px_12px_rgba(16,185,129,0.2)]' 
+                  : 'bg-rose-950/80 text-rose-300 border-rose-500/40 shadow-[0_4px_12px_rgba(244,63,94,0.2)]'
               }`}>
                 {promoMsg.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
                 )}
                 <span>{promoMsg.text}</span>
               </div>
             )}
           </div>
 
-          {/* Student Status Summary */}
+          {/* Student Status Summary 3D */}
           {currentUser && (
-            <div className="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-700/60 shadow-xs space-y-2.5">
+            <div className="p-4 rounded-2xl bg-slate-800/80 border-2 border-slate-700/80 shadow-[0_4px_12px_rgba(0,0,0,0.3)] space-y-2.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-500">O'quvchi:</span>
-                <span className="font-bold text-slate-900 dark:text-white">{currentUser.fullName}</span>
+                <span className="font-bold text-slate-400">O'quvchi:</span>
+                <span className="font-black text-white">{currentUser.fullName}</span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-500">Sinf & Fan:</span>
-                <span className="font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">8-B Sinf • Texnologiya</span>
+                <span className="font-bold text-slate-400">Sinf & Fan:</span>
+                <span className="font-black text-blue-400 bg-blue-500/15 border border-blue-500/30 px-2.5 py-0.5 rounded-lg">8-B Sinf • Texnologiya</span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-500">Balans:</span>
-                <span className="font-mono font-extrabold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md">{currentUser.coins} Coin | {currentUser.xp} XP</span>
+                <span className="font-bold text-slate-400">Balans:</span>
+                <span className="font-mono font-black text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 rounded-lg">{currentUser.coins} Coin | {currentUser.xp} XP</span>
               </div>
             </div>
           )}
 
-          {/* School & Subject Info */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 to-indigo-500/10 border border-blue-500/20 text-xs text-slate-600 dark:text-slate-300 space-y-1.5 shadow-xs">
-            <p className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-              <Wrench className="w-4 h-4" />
+          {/* School & Subject Info 3D Card */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/50 to-indigo-950/50 border-2 border-blue-500/30 text-xs text-slate-300 space-y-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+            <p className="font-black text-blue-400 flex items-center gap-1.5">
+              <Wrench className="w-4 h-4 text-blue-400" />
               29-Maktab 8-Sinf Texnologiya Fani
             </p>
-            <p className="leading-relaxed text-[11px] opacity-90">
+            <p className="leading-relaxed text-[11px] text-slate-400 font-medium">
               Tokarlik stanoklari, duradgorlik, chilangarlik, elektrotexnika va texnologik xaritalar bo'yicha interaktiv darslik va savol-javob maydoni.
             </p>
           </div>
         </div>
 
-        {/* Footer: Contains "Made in Tursunboy" (Click 4 times to unlock Admin!) */}
-        <div className="p-4 border-t border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/50 flex flex-col items-center justify-center gap-1">
+        {/* Footer: Contains "Made in Tursunboy" */}
+        <div className="p-4 border-t-2 border-slate-800 bg-slate-950/80 flex flex-col items-center justify-center gap-1">
           <div
             onClick={handleTursunboyClick}
-            className="text-xs font-bold text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors select-none cursor-pointer text-center py-1.5 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50"
+            className="text-xs font-black text-slate-400 hover:text-blue-400 transition-colors select-none cursor-pointer text-center py-1.5 px-4 rounded-xl hover:bg-slate-800/80 border border-transparent hover:border-slate-700"
             title="Texnologiya portali"
           >
             Made in Tursunboy
           </div>
-          <span className="text-[10px] text-slate-400 font-medium">
+          <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">
             29-sonli umumiy o'rta ta'lim maktabi
           </span>
         </div>
       </div>
 
-      {/* Admin Password Prompt Modal (Activated by 4 clicks on "Made in Tursunboy") */}
+      {/* Admin Password Prompt Modal 3D */}
       {showAdminPrompt && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 max-w-sm w-full shadow-2xl relative">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-lg animate-fadeIn">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-[2.5rem] border-4 border-rose-500/40 p-6 max-w-sm w-full shadow-[0_25px_50px_rgba(0,0,0,0.8)] relative">
             <button
               onClick={() => setShowAdminPrompt(false)}
               aria-label="Yopish"
-              className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all cursor-pointer hover:rotate-90 duration-200"
+              className="absolute top-4 right-4 p-2.5 rounded-2xl bg-slate-800 text-slate-300 hover:text-white transition-all cursor-pointer hover:rotate-90 duration-200 border border-slate-700"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center gap-3.5 mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 flex items-center justify-center shadow-xs">
-                <ShieldAlert className="w-6 h-6" />
+            <div className="flex items-center gap-3.5 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-red-700 text-white flex items-center justify-center shadow-[0_6px_15px_rgba(244,63,94,0.4)] border border-rose-400/40">
+                <ShieldAlert className="w-6 h-6 text-rose-100" />
               </div>
               <div>
-                <h3 className="font-display font-black text-base text-slate-900 dark:text-white">
+                <h3 className="font-display font-black text-base text-white">
                   Admin Panelga Kirish
                 </h3>
-                <p className="text-xs text-slate-500 font-medium">Boshqaruv parolini kiriting</p>
+                <p className="text-xs text-rose-400 font-bold">Boshqaruv parolini kiriting</p>
               </div>
             </div>
 
@@ -290,9 +292,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       setAdminPassword(e.target.value);
                       setAdminError(false);
                     }}
-                    className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500/50 transition-all shadow-xs"
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-900 border-2 border-slate-700 rounded-2xl text-sm font-bold text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all shadow-[inset_0_2px_6px_rgba(0,0,0,0.5)]"
                   />
-                  <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                  <KeyRound className="w-4 h-4 text-slate-400 absolute left-4 top-4" />
                 </div>
                 
                 <p className="text-[11px] text-slate-400 mt-1.5 italic font-medium">
@@ -300,24 +302,24 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </p>
 
                 {adminError && (
-                  <p className="text-xs text-rose-500 mt-2 font-bold flex items-center gap-1.5 bg-rose-500/10 p-2 rounded-lg border border-rose-500/20">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
+                  <p className="text-xs text-rose-300 mt-2 font-bold flex items-center gap-2 bg-rose-950/80 p-3 rounded-xl border-2 border-rose-600 shadow-[0_4px_12px_rgba(244,63,94,0.3)] animate-shake">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
                     Noto'g'ri parol kiritildi!
                   </p>
                 )}
               </div>
 
-              <div className="flex gap-2.5 pt-1">
+              <div className="flex gap-3 pt-1">
                 <button
                   type="button"
                   onClick={() => setShowAdminPrompt(false)}
-                  className="flex-1 py-3 text-xs font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-750 transition-all cursor-pointer"
+                  className="flex-1 py-3 text-xs font-black text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-2xl transition-all cursor-pointer border border-slate-700 shadow-inner"
                 >
                   Bekor qilish
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-3 text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 rounded-xl shadow-md transition-all cursor-pointer active:scale-95"
+                  className="flex-1 py-3 text-xs font-black text-white bg-gradient-to-b from-rose-600 to-red-700 active:translate-y-0.5 border-b-4 border-rose-950 hover:brightness-110 rounded-2xl shadow-[0_4px_0_#881337] transition-all cursor-pointer"
                 >
                   Kirish
                 </button>
