@@ -1050,3 +1050,69 @@ html:not(.dark) .gaming-portal-title {
     transition-duration: .01ms !important;
   }
 }
+
+/* ===== MOBIL TUZATISHLAR ===== */
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;   /* telefon brauzer paneli sakrashiga qarshi */
+  overflow-x: hidden;
+}
+
+img, svg, video, canvas { max-width: 100%; }
+
+/* Uzun so'zlar ramkadan chiqib ketmasin */
+h1, h2, h3, h4, p, li, label {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* iPhone input'ga bosganda sahifa kattalashib ketmasin (16px dan kichik shrift sababchi) */
+input, textarea, select { font-size: 16px; }
+
+/* Bosish oson bo'lsin: kamida 44px */
+button, [role="button"], a.btn, select {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+.gaming-navbar button { min-height: 0; }  /* navbar o'z o'lchamiga ega */
+
+/* Tugma matni sig'masa, keyingi qatorga o'tsin */
+.btn-gradient {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
+}
+
+/* Sensorli ekranda hover "yopishib" qolmasin */
+@media (hover: none) {
+  .neon-card:hover,
+  .game-card:hover { transform: none; }
+  .game-card:hover::after { left: -60%; }
+  .btn-gradient:hover { transform: none; }
+}
+
+/* Telefon: yengil va tez ishlashi uchun og'ir effektlarni kamaytiramiz */
+@media (max-width: 640px) {
+  .grid-bg { display: none; }
+  .aurora-blob { filter: blur(50px); animation: none; opacity: .22; }
+  .neon-card::before { animation: none; opacity: .5; }
+  .neon-card, .game-card, .glass-card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .neon-card { border-radius: 20px; }
+  .game-card { border-radius: 18px; }
+
+  .gaming-portal-title {
+    font-size: clamp(1.9rem, 9.5vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .btn-gradient { width: 100%; padding: 13px 18px; }
+}
+
+/* iPhone pastki chiziq uchun joy */
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6px); }
