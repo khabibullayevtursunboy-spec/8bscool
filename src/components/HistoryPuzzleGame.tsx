@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { User } from '../types';
 import { StorageService } from '../services/storage';
+import { API_URL, apiGet } from '../services/api';
 import {
   Puzzle,
   Lightbulb,
@@ -32,7 +33,7 @@ type Mode = 'all' | Category;
 type Phase = 'intro' | 'playing' | 'finished';
 
 interface HistoryItem {
-  id: number;
+  id: string;
   year: number;
   event: string;   // kartada ko'rinadigan qisqa nom
   hint: string;    // "Yordam" bosilganda tepada chiqadigan izoh
@@ -267,7 +268,16 @@ const RAW_BANK: Omit<HistoryItem, 'id'>[] = [
   }
 ];
 
-const HISTORY_BANK: HistoryItem[] = RAW_BANK.map((item, i) => ({ ...item, id: i }));
+const HISTORY_BANK: HistoryItem[] = RAW_BANK.map((item, i) => ({ ...item, id: `b-${i}` }));
+
+// Django admin panelidan keladigan voqea
+interface RemoteHistoryEvent {
+  id: number;
+  year: number;
+  event: string;
+  hint: string;
+  cat: Category;
+}
 
 const ROUND_SIZE = 6;
 const MAX_LIVES = 5;
@@ -308,9 +318,35 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
   const [phase, setPhase] = useState<Phase>('intro');
   const [mode, setMode] = useState<Mode>('all');
 
+  // O'yin bazasi: o'zimizdagi ro'yxat + admin paneldan qo'shilgan voqealar
+  const [bank, setBank] = useState<HistoryItem[]>(HISTORY_BANK);
+
+  useEffect(() => {
+    if (!API_URL) return;
+    let cancelled = false;
+    apiGet<RemoteHistoryEvent[]>('/api/content/history/')
+      .then((rows) => {
+        if (cancelled || !Array.isArray(rows)) return;
+        const remote: HistoryItem[] = rows.map((r) => ({
+          id: `d-${r.id}`,
+          year: r.year,
+          event: r.event,
+          hint: r.hint,
+          cat: r.cat
+        }));
+        setBank([...remote, ...HISTORY_BANK]);
+      })
+      .catch(() => {
+        /* Server uxlayotgan bo'lishi mumkin: o'z ro'yxatimiz bilan davom etamiz */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const [round, setRound] = useState<HistoryItem[]>([]);   // yil bo'yicha tartiblangan
-  const [tray, setTray] = useState<number[]>([]);           // aralash voqea bo'laklari
-  const [matched, setMatched] = useState<number[]>([]);
+  const [tray, setTray] = useState<string[]>([]);           // aralash voqea bo'laklari
+  const [matched, setMatched] = useState<string[]>([]);
 
   const [lives, setLives] = useState(MAX_LIVES);
   const [score, setScore] = useState(0);
@@ -320,10 +356,10 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
   const [hintsUsed, setHintsUsed] = useState(0);
   const [elapsed, setElapsed] = useState(0);
 
-  const [selSlot, setSelSlot] = useState<number | null>(null);
-  const [selPiece, setSelPiece] = useState<number | null>(null);
-  const [wrong, setWrong] = useState<{ slot: number; piece: number } | null>(null);
-  const [hintId, setHintId] = useState<number | null>(null);
+  const [selSlot, setSelSlot] = useState<string | null>(null);
+  const [selPiece, setSelPiece] = useState<string | null>(null);
+  const [wrong, setWrong] = useState<{ slot: string; piece: string } | null>(null);
+  const [hintId, setHintId] = useState<string | null>(null);
 
   const [result, setResult] = useState<{
     won: boolean;
@@ -360,8 +396,17 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
   );
 
   const startRound = (m: Mode = mode) => {
-    const pool = m === 'all' ? HISTORY_BANK : HISTORY_BANK.filter((h) => h.cat === m);
-    const picked = shuffle(pool).slice(0, ROUND_SIZE);
+    const pool = m === 'all' ? bank : bank.filter((h) => h.cat === m);
+
+    // Bir o'yinda yillar takrorlanmasligi kerak
+    const usedYears = new Set<number>();
+    const picked: HistoryItem[] = [];
+    for (const item of shuffle(pool)) {
+      if (usedYears.has(item.year)) continue;
+      usedYears.add(item.year);
+      picked.push(item);
+      if (picked.length === ROUND_SIZE) break;
+    }
     setRound([...picked].sort((a, b) => a.year - b.year));
     setTray(shuffle(picked.map((p) => p.id)));
     setMatched([]);
@@ -397,7 +442,7 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
     setPhase('finished');
   };
 
-  const evaluate = (slotId: number, pieceId: number) => {
+  const evaluate = (slotId: string, pieceId: string) => {
     if (slotId === pieceId) {
       // ✅ To'g'ri
       const newMatched = [...matched, slotId];
@@ -435,7 +480,7 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
     }
   };
 
-  const onSlotClick = (id: number) => {
+  const onSlotClick = (id: string) => {
     if (phase !== 'playing' || wrong || matched.includes(id)) return;
     if (selPiece !== null) {
       evaluate(id, selPiece);
@@ -444,7 +489,7 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
     setSelSlot((prev) => (prev === id ? null : id));
   };
 
-  const onPieceClick = (id: number) => {
+  const onPieceClick = (id: string) => {
     if (phase !== 'playing' || wrong) return;
     if (selSlot !== null) {
       evaluate(selSlot, id);
@@ -728,7 +773,8 @@ export function HistoryPuzzleGame({ currentUser, onUserStatsUpdated }: HistoryPu
 
               <div className="space-y-3">
                 {tray.map((id, i) => {
-                  const item = HISTORY_BANK[id];
+                  const item = round.find((r) => r.id === id);
+                  if (!item) return null;
                   const isSel = selPiece === id;
                   const isWrong = wrong?.piece === id;
 
