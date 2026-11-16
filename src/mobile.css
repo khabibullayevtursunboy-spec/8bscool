@@ -1,0 +1,83 @@
+/* =====================================================================
+   mobile.css — butun sayt uchun telefon (ixcham) uslubi
+   Ulash: src/main.tsx ichida  index.css  dan KEYIN:
+          import './mobile.css';
+   ===================================================================== */
+
+/* ---------- Umumiy ---------- */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; }
+img, video, canvas, svg { max-width: 100%; }
+
+/* ---------- Planshet va telefon (<= 768px) ---------- */
+@media (max-width: 768px) {
+  /* Tailwind rem'da ishlaydi: shrifni biroz kichraytirsak hamma narsa ixchamlashadi */
+  html { font-size: 14.5px; }
+
+  .game-card,
+  .neon-card,
+  .glass-card { border-radius: 18px; }
+
+  .badge-glow { font-size: 10px; padding: 3px 9px; }
+}
+
+/* ---------- Telefon (<= 640px) ---------- */
+@media (max-width: 640px) {
+  html { font-size: 14px; }
+
+  /* Sarlavhalar */
+  .gaming-portal-title {
+    font-size: clamp(26px, 8.6vw, 38px) !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .gaming-portal-subtitle {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    margin-top: 10px !important;
+  }
+
+  /* Tugmalar */
+  .btn-gradient {
+    padding: 0.62rem 1rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 14px !important;
+  }
+
+  /* Kartalar ichidagi katta bo'shliqlar */
+  .game-card,
+  .neon-card { box-shadow: 0 10px 24px -14px rgba(30, 41, 100, 0.35); }
+
+  /* Modal oynalar: ekranga sig'sin, ichida aylansin */
+  [role='dialog'],
+  .modal-panel,
+  .modal-content {
+    max-height: 92dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Jadvallar yon tomonga aylansin, sahifani buzmasin */
+  table { display: block; max-width: 100%; overflow-x: auto; }
+
+  /* Kiritish maydonlari: iPhone'da ustiga yaqinlashib ketmasligi uchun */
+  input, select, textarea { font-size: 16px !important; }
+
+  /* Hamma narsa bir xil kichik ichki masofa */
+  main { scroll-padding-bottom: 110px; }
+}
+
+/* ---------- Juda tor telefonlar (<= 380px) ---------- */
+@media (max-width: 380px) {
+  html { font-size: 13.5px; }
+}
+
+/* ---------- Kichik balandlikdagi ekranlar (gorizontal telefon) ---------- */
+@media (max-height: 480px) and (orientation: landscape) {
+  html { font-size: 13px; }
+}
+
+/* ---------- Harakat sezgir foydalanuvchilar uchun ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-soft-pulse { animation: none !important; }
+}

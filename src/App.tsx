@@ -191,6 +191,17 @@ const FEATURE_CARDS: FeatureCard[] = [
     ctaColor: 'text-red-600 dark:text-red-400',
     accent: 'from-red-500 via-orange-400 to-red-500',
     hot: true
+  },
+  {
+    tab: 'maze',
+    title: 'Sky Maze 3D',
+    desc: "Osmondagi suzuvchi orolda birinchi shaxs 3D labirint. Har o'yindan keyin devorlar o'zgaradi — finish nuriga yetib oling!",
+    cta: 'Labirintga kirish',
+    icon: Flag,
+    iconWrap: 'bg-gradient-to-br from-sky-500 to-indigo-600 shadow-sky-500/30',
+    ctaColor: 'text-sky-600 dark:text-sky-400',
+    accent: 'from-sky-500 via-indigo-400 to-sky-500',
+    hot: true
   }
 ];
 
@@ -216,6 +227,7 @@ const PAGE_NAMES: Record<string, string> = {
   historypuzzle: 'Tarix Puzzle',
   wordrace: "So'z Poygasi",
   snake: 'Snake 3D — English Challenge',
+  maze: 'Sky Maze 3D'
 };
 
 /* ---------- Kunlik savol: har bir foydalanuvchi yechgan savollarni eslab qolish ---------- */
@@ -514,11 +526,11 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="relative flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 pb-28 sm:pb-32">
+      <main className="relative flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 md:py-8 pb-28 sm:pb-32">
 
         {/* TAB 1: ASOSIY (HOME) */}
         {activeTab === 'home' && (
-          <div className="space-y-8 sm:space-y-10 animate-fadeIn">
+          <div className="space-y-5 sm:space-y-10 animate-fadeIn">
 
             {/* Daily Bonus Banner for Students */}
             {currentUser && (
@@ -597,8 +609,8 @@ export default function App() {
             )}
 
             {/* Hero Split Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
-              <div className="lg:col-span-7 flex flex-col justify-center space-y-7">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-10 items-stretch">
+              <div className="lg:col-span-7 flex flex-col justify-center space-y-4 sm:space-y-7">
                 <div>
                   <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-5 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-cyan-700 dark:text-cyan-300 shadow-[0_0_24px_rgba(34,211,238,0.15)] animate-fadeIn">
                     <Sparkles className="w-4 h-4 text-fuchsia-500 animate-pulse" />
@@ -616,7 +628,7 @@ export default function App() {
                 </div>
 
                 {/* Main Action CTAs */}
-                <div className="flex flex-wrap items-center gap-4">
+                <div className="flex flex-wrap items-center gap-2.5 sm:gap-4">
                   <button
                     onClick={() => setActiveTab('tests')}
                     className="btn-gradient"
@@ -657,8 +669,8 @@ export default function App() {
 
               {/* Right Hero Image Card */}
               <div className="lg:col-span-5 relative">
-                <div className="neon-card h-full min-h-[360px] p-[3px]">
-                  <div className="relative isolate h-full min-h-[354px] rounded-[22px] overflow-hidden group">
+                <div className="neon-card h-full min-h-[210px] sm:min-h-[360px] p-[3px]">
+                  <div className="relative isolate h-full min-h-[204px] sm:min-h-[354px] rounded-[22px] overflow-hidden group">
                     <img
                       src={schoolHeroBanner}
                       alt="29-Maktab o'quvchilari"
@@ -714,7 +726,7 @@ export default function App() {
             </div>
 
             {/* Bento Highlights */}
-            <div className="stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <div className="stagger grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-6">
               {FEATURE_CARDS.map((card, i) => {
                 const Icon = card.icon;
                 return (
@@ -729,36 +741,36 @@ export default function App() {
                         setActiveTab(card.tab as TabKey);
                       }
                     }}
-                    className="game-card p-6 cursor-pointer group"
+                    className="game-card p-3.5 sm:p-6 cursor-pointer group"
                   >
                     {/* Tepadagi rangli chiziq */}
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${card.accent} opacity-80 group-hover:opacity-100`} />
 
                     {/* Katta shaffof raqam */}
-                    <span className="absolute -top-2 right-4 font-display font-black text-7xl text-slate-900/[0.04] dark:text-white/[0.05] select-none pointer-events-none">
+                    <span className="absolute -top-2 right-4 font-display font-black text-5xl sm:text-7xl text-slate-900/[0.04] dark:text-white/[0.05] select-none pointer-events-none">
                       {String(i + 1).padStart(2, '0')}
                     </span>
 
                     {card.hot && (
-                      <span className="absolute top-4 right-4 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30">
+                      <span className="absolute top-4 right-4 hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30">
                         <Flame className="w-3 h-3" /> HOT
                       </span>
                     )}
 
                     <div
-                      className={`w-14 h-14 rounded-2xl text-white flex items-center justify-center mb-5 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 ${card.iconWrap}`}
+                      className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl text-white flex items-center justify-center mb-2.5 sm:mb-5 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 ${card.iconWrap}`}
                     >
-                      <Icon className="w-7 h-7" />
+                      <Icon className="w-5 h-5 sm:w-7 sm:h-7" />
                     </div>
 
-                    <h3 className="font-display font-extrabold text-lg text-slate-900 dark:text-white mb-2">
+                    <h3 className="font-display font-extrabold text-[13px] sm:text-lg leading-tight text-slate-900 dark:text-white mb-1 sm:mb-2">
                       {card.title}
                     </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-5 font-medium">
+                    <p className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 leading-snug sm:leading-relaxed mb-2.5 sm:mb-5 font-medium line-clamp-2 sm:line-clamp-none">
                       {card.desc}
                     </p>
 
-                    <div className={`flex items-center gap-1.5 text-xs font-extrabold ${card.ctaColor}`}>
+                    <div className={`flex items-center gap-1.5 text-[11px] sm:text-xs font-extrabold ${card.ctaColor}`}>
                       <span>{card.cta}</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-2 transition-transform" />
                     </div>
@@ -766,14 +778,6 @@ export default function App() {
                 );
               })}
             </div>
-            {/* TAB: SNAKE 3D */}
-            {activeTab === ('snake' as TabKey) && (
-              <SnakeGame
-                currentUser={currentUser}
-                onUserStatsUpdated={handleUserStatsUpdated}
-              />
-            )}
-
             {/* Promokod Faollashtirish Qismi */}
             <div className="neon-card p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
               <div className="flex items-center gap-4">
@@ -841,12 +845,12 @@ export default function App() {
 
             {/* Daily Challenge Interactive Box */}
             {dailyStatus === 'playing' && currentDailyQ && (
-              <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-950 text-white p-6 sm:p-9 shadow-2xl shadow-indigo-900/30 border border-indigo-400/20">
+              <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-indigo-950 via-blue-950 to-slate-950 text-white p-4 sm:p-9 shadow-2xl shadow-indigo-900/30 border border-indigo-400/20">
                 {/* Dekorativ yorug'lik dog'lari */}
                 <div className="pointer-events-none absolute -top-24 -right-16 w-72 h-72 rounded-full bg-fuchsia-500/20 blur-3xl" />
                 <div className="pointer-events-none absolute -bottom-24 -left-16 w-72 h-72 rounded-full bg-cyan-500/20 blur-3xl" />
 
-                <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4 mb-7">
+                <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 sm:mb-7">
                   <div>
                     <div className="flex items-center gap-2 text-xs font-extrabold text-amber-300 uppercase tracking-wider mb-1.5">
                       <Zap className="w-4 h-4 fill-amber-300" />
@@ -888,7 +892,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="relative bg-white/5 backdrop-blur-md rounded-2xl p-5 sm:p-7 border border-white/10">
+                <div className="relative bg-white/5 backdrop-blur-md rounded-2xl p-3.5 sm:p-7 border border-white/10">
                   <p className="font-display text-base sm:text-lg font-bold text-white mb-6 leading-relaxed">
                     {currentDailyQ.question}
                   </p>
@@ -994,7 +998,7 @@ export default function App() {
             onUserStatsUpdated={handleUserStatsUpdated}
           />
         )}
-        
+
         {/* TAB: SKY MAZE 3D */}
         {activeTab === ('maze' as TabKey) && (
           <MazeGame
