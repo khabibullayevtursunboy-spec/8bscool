@@ -3,7 +3,7 @@ import { User } from '../types';
 import { StorageService } from '../services/storage';
 import { 
   Timer, Play, Pause, RotateCcw, Sparkles, Coffee, BookOpen, 
-  Settings, Volume2, VolumeX, CheckCircle2, Award, Zap 
+  Settings, Volume2, VolumeX, Award, Zap, CheckCircle2
 } from 'lucide-react';
 
 interface PomodoroTimerProps {
@@ -19,6 +19,7 @@ interface ModeConfig {
   color: string;
   gradient: string;
   ringColor: string;
+  glowColor: string;
   bgLight: string;
   icon: React.ReactNode;
   subtitle: string;
@@ -56,7 +57,8 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
       color: 'rose',
       gradient: 'from-rose-500 via-pink-500 to-red-600',
       ringColor: '#f43f5e',
-      bgLight: 'bg-rose-50/50 dark:bg-rose-950/20',
+      glowColor: 'shadow-rose-500/30',
+      bgLight: 'bg-rose-50/60 dark:bg-rose-950/30',
       icon: <BookOpen className="w-4 h-4" />,
       subtitle: '📚 Diqqatni jamlab o‘qish vaqti',
     },
@@ -66,7 +68,8 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
       color: 'emerald',
       gradient: 'from-emerald-500 via-teal-500 to-green-600',
       ringColor: '#10b981',
-      bgLight: 'bg-emerald-50/50 dark:bg-emerald-950/20',
+      glowColor: 'shadow-emerald-500/30',
+      bgLight: 'bg-emerald-50/60 dark:bg-emerald-950/30',
       icon: <Coffee className="w-4 h-4" />,
       subtitle: '☕ Ozgina dam oling, vizual xotirani tiklang',
     },
@@ -76,7 +79,8 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
       color: 'indigo',
       gradient: 'from-indigo-500 via-purple-500 to-blue-600',
       ringColor: '#6366f1',
-      bgLight: 'bg-indigo-50/50 dark:bg-indigo-950/20',
+      glowColor: 'shadow-indigo-500/30',
+      bgLight: 'bg-indigo-50/60 dark:bg-indigo-950/30',
       icon: <Sparkles className="w-4 h-4" />,
       subtitle: '🌟 Chuqur hordiq chiqaring va energiyaga to‘ling',
     },
@@ -133,48 +137,49 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
   const strokeDashoffset = 502 - (502 * progressPercentage) / 100;
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto animate-fadeIn px-2 sm:px-0">
+    <div className="space-y-6 max-w-2xl mx-auto px-3 sm:px-0 transition-all duration-300">
       
       {/* Banner Card */}
-      <div className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r ${currentConfig.gradient} text-white shadow-2xl transition-all duration-500`}>
-        <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-black/10 rounded-full blur-2xl pointer-events-none" />
+      <div className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r ${currentConfig.gradient} text-white shadow-2xl transition-all duration-500 group hover:shadow-3xl`}>
+        {/* Glow ambient circles */}
+        <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover:scale-110" />
+        <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-black/20 rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover:scale-110" />
 
-        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-5">
           <div className="space-y-2 text-center sm:text-left">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-semibold text-white shadow-sm">
-              <Timer className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-semibold text-white shadow-sm">
+              <Timer className="w-4 h-4 animate-spin-slow" />
               <span>Samaradorlik Klubi</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-md">
               Pomodoro Taymer
             </h2>
-            <p className="text-xs sm:text-sm text-white/80 font-medium">
-              Vaqtingizni to‘g‘ri boshqaring va har bir sessiyada mukofotlar yuting!
+            <p className="text-xs sm:text-sm text-white/90 font-medium max-w-sm">
+              Vaqtingizni unumli boshqaring va har bir yakunlangan sessiyada mukofotlarni qo'lga kiriting!
             </p>
           </div>
 
           {/* Stats Badge */}
-          <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20 shadow-inner">
-            <div className="p-2 bg-white/20 rounded-xl text-yellow-300">
-              <Award className="w-5 h-5" />
+          <div className="flex items-center gap-3.5 bg-white/15 backdrop-blur-xl px-5 py-3.5 rounded-2xl border border-white/25 shadow-lg hover:bg-white/20 transition-all">
+            <div className="p-2.5 bg-yellow-400/20 backdrop-blur-md rounded-xl text-yellow-300 border border-yellow-300/30">
+              <Award className="w-6 h-6 drop-shadow-sm" />
             </div>
             <div className="text-left">
-              <div className="text-[10px] uppercase tracking-wider font-bold text-white/70">Bajarildi</div>
-              <div className="text-lg font-black text-white">{completedSessions} ta sessiya</div>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-white/80">Bajarildi</div>
+              <div className="text-xl font-black text-white tracking-tight">{completedSessions} <span className="text-sm font-semibold text-white/80">sessiya</span></div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Timer Container */}
-      <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-200/80 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-xl transition-all">
+      <div className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl border border-slate-200/80 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl transition-all duration-300">
         
-        {/* Controls header (Sound, Settings) */}
+        {/* Controls Header (Status indicator, Sound & Settings buttons) */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60">
+            <span className={`w-2.5 h-2.5 rounded-full ${isRunning ? 'bg-emerald-500 animate-ping' : 'bg-amber-400'}`} />
+            <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
               {isRunning ? 'Jarayonda...' : 'Tayyor'}
             </span>
           </div>
@@ -182,14 +187,18 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95 border border-slate-200/50 dark:border-slate-700/50"
               title={soundEnabled ? 'Ovozni o‘chirish' : 'Ovozni yoqish'}
             >
-              {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-500" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+              {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-500" /> : <VolumeX className="w-4 h-4 text-rose-400" />}
             </button>
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+              className={`p-2.5 rounded-xl transition-all active:scale-95 border ${
+                showSettings 
+                  ? 'bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/20' 
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border-slate-200/50 dark:border-slate-700/50'
+              }`}
               title="Sozlamalar"
             >
               <Settings className="w-4 h-4" />
@@ -197,44 +206,44 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
           </div>
         </div>
 
-        {/* Settings Panel (Collapsible) */}
+        {/* Collapsible Settings Panel */}
         {showSettings && (
-          <div className="mb-6 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3 animate-fadeIn">
-            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-              Vaqt sozlamalari (Daqiqa)
+          <div className="mb-6 p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/70 space-y-3 animate-fadeIn backdrop-blur-md">
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Settings className="w-3.5 h-3.5 text-rose-500" /> Vaqt sozlamalari (Daqiqa)
             </h4>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-[11px] text-slate-500 dark:text-slate-400 block mb-1">Diqqat</label>
+                <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Diqqat</label>
                 <input
                   type="number"
                   min="1"
                   max="60"
                   value={durations.work}
-                  onChange={(e) => setDurations({ ...durations, work: Number(e.target.value) })}
-                  className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold"
+                  onChange={(e) => setDurations({ ...durations, work: Math.max(1, Number(e.target.value)) })}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs text-center font-bold outline-none focus:ring-2 focus:ring-rose-500/40 transition-all shadow-sm"
                 />
               </div>
               <div>
-                <label className="text-[11px] text-slate-500 dark:text-slate-400 block mb-1">Qisqa break</label>
+                <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Qisqa break</label>
                 <input
                   type="number"
                   min="1"
                   max="30"
                   value={durations.shortBreak}
-                  onChange={(e) => setDurations({ ...durations, shortBreak: Number(e.target.value) })}
-                  className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold"
+                  onChange={(e) => setDurations({ ...durations, shortBreak: Math.max(1, Number(e.target.value)) })}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs text-center font-bold outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all shadow-sm"
                 />
               </div>
               <div>
-                <label className="text-[11px] text-slate-500 dark:text-slate-400 block mb-1">Uzoq break</label>
+                <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-1">Uzoq break</label>
                 <input
                   type="number"
                   min="1"
                   max="60"
                   value={durations.longBreak}
-                  onChange={(e) => setDurations({ ...durations, longBreak: Number(e.target.value) })}
-                  className="w-full px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-center font-bold"
+                  onChange={(e) => setDurations({ ...durations, longBreak: Math.max(1, Number(e.target.value)) })}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs text-center font-bold outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all shadow-sm"
                 />
               </div>
             </div>
@@ -242,7 +251,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
         )}
 
         {/* Mode Selector Tabs */}
-        <div className="grid grid-cols-3 gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/60 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 mb-8">
+        <div className="grid grid-cols-3 gap-2 p-1.5 bg-slate-100/80 dark:bg-slate-800/60 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 mb-8 backdrop-blur-md">
           {(['work', 'shortBreak', 'longBreak'] as TimerMode[]).map((m) => {
             const isSelected = mode === m;
             const cfg = modeConfigs[m];
@@ -250,43 +259,53 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+                className={`py-3 px-3 rounded-xl text-xs font-bold transition-all duration-300 flex items-center justify-center gap-2 ${
                   isSelected
-                    ? `bg-gradient-to-r ${cfg.gradient} text-white shadow-md scale-[1.02]`
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? `bg-gradient-to-r ${cfg.gradient} text-white shadow-lg ${cfg.glowColor} scale-[1.02]`
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/40 dark:hover:bg-slate-700/30'
                 }`}
               >
                 {cfg.icon}
-                <span className="hidden sm:inline">{cfg.label}</span>
+                <span className="hidden sm:inline tracking-wide">{cfg.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Task Input */}
+        {/* Task Input Field */}
         <div className="max-w-md mx-auto mb-8">
-          <div className="relative">
+          <div className="relative group">
             <input
               type="text"
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
               placeholder="Masalan: Fizikadan 10 ta masala yechish..."
-              className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-xs sm:text-sm font-medium text-slate-900 dark:text-white text-center outline-none focus:ring-2 focus:ring-rose-500/50 transition-all shadow-inner"
+              className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 text-center outline-none focus:ring-2 focus:ring-rose-500/40 focus:bg-white dark:focus:bg-slate-800 transition-all duration-300 shadow-inner"
             />
+            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none opacity-40 group-focus-within:opacity-100 transition-opacity">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            </div>
           </div>
         </div>
 
         {/* Circular Progress Timer Display */}
-        <div className="flex flex-col items-center justify-center py-4">
+        <div className="flex flex-col items-center justify-center py-2">
           <div className="relative flex items-center justify-center w-64 h-64 sm:w-72 sm:h-72">
+            
+            {/* Glowing effect behind SVG */}
+            <div 
+              className="absolute inset-4 rounded-full blur-2xl opacity-20 transition-all duration-500"
+              style={{ backgroundColor: currentConfig.ringColor }}
+            />
+
             {/* SVG Circle Progress */}
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 180 180">
+            <svg className="w-full h-full transform -rotate-90 drop-shadow-md" viewBox="0 0 180 180">
               {/* Background Track */}
               <circle
                 cx="90"
                 cy="90"
                 r="80"
-                className="stroke-slate-100 dark:stroke-slate-800"
+                className="stroke-slate-100 dark:stroke-slate-800/80"
                 strokeWidth="10"
                 fill="transparent"
               />
@@ -305,12 +324,12 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
               />
             </svg>
 
-            {/* Inner Content */}
-            <div className="absolute flex flex-col items-center justify-center text-center space-y-1">
-              <div className="font-mono font-black text-5xl sm:text-6xl tracking-tight text-slate-900 dark:text-white">
+            {/* Inner Timer Info */}
+            <div className="absolute flex flex-col items-center justify-center text-center space-y-1.5">
+              <div className="font-mono font-black text-5xl sm:text-6xl tracking-tighter text-slate-900 dark:text-white drop-shadow-sm">
                 {formatTime(timeLeft)}
               </div>
-              <p className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 max-w-[140px]">
+              <p className="text-[11px] font-semibold text-slate-400 dark:text-slate-400 max-w-[150px] leading-tight">
                 {currentConfig.subtitle}
               </p>
             </div>
@@ -318,19 +337,19 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
         </div>
 
         {/* Action Control Buttons */}
-        <div className="flex items-center justify-center gap-4 mt-6">
+        <div className="flex items-center justify-center gap-4 mt-8">
           <button
             onClick={() => setIsRunning(!isRunning)}
-            className={`px-8 py-4 rounded-2xl font-black text-sm text-white shadow-xl transition-all transform active:scale-95 flex items-center gap-2.5 ${
+            className={`px-8 py-4 rounded-2xl font-black text-sm text-white shadow-xl transition-all duration-300 transform active:scale-95 flex items-center gap-2.5 ${
               isRunning
                 ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/30'
-                : `bg-gradient-to-r ${currentConfig.gradient} hover:opacity-95 shadow-rose-500/20`
+                : `bg-gradient-to-r ${currentConfig.gradient} hover:opacity-95 ${currentConfig.glowColor}`
             }`}
           >
             {isRunning ? (
               <>
                 <Pause className="w-5 h-5 fill-white" />
-                <span>To'xtatib turish</span>
+                <span>To'xtatish</span>
               </>
             ) : (
               <>
@@ -345,7 +364,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
               setIsRunning(false);
               setTimeLeft(durations[mode] * 60);
             }}
-            className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-sm"
+            className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-sm border border-slate-200/50 dark:border-slate-700/50"
             title="Qayta boshlash"
           >
             <RotateCcw className="w-5 h-5" />
@@ -354,13 +373,13 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ currentUser, onUse
 
         {/* Bottom Reward Info Badge */}
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-center gap-6 text-xs text-slate-500 dark:text-slate-400 font-medium">
-          <div className="flex items-center gap-1.5">
-            <Zap className="w-4 h-4 text-amber-500" />
-            <span>Mukofot: <strong>+15 Coin</strong></span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/50">
+            <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
+            <span className="text-amber-900 dark:text-amber-300 font-semibold">Mukofot: <strong>+15 Coin</strong></span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200/50 dark:border-indigo-800/50">
             <Sparkles className="w-4 h-4 text-indigo-500" />
-            <span>Tajriba: <strong>+20 XP</strong></span>
+            <span className="text-indigo-900 dark:text-indigo-300 font-semibold">Tajriba: <strong>+20 XP</strong></span>
           </div>
         </div>
 

@@ -28,6 +28,11 @@ import { DailyBonusModal } from './components/DailyBonusModal';
 import { Footer } from './components/Footer';
 import { TugOfWarGame } from './components/TugOfWarGame';
 import { HistoryPuzzleGame } from './components/HistoryPuzzleGame';
+import { WelcomeScreen } from './components/WelcomeScreen';
+import { PageLoader } from './components/PageLoader';
+import { WordRaceGame } from './components/WordRaceGame';
+import SnakeGame from './components/SnakeGame';
+import { MazeGame } from './components/MazeGame';
 import {
   Swords,
   Trophy,
@@ -47,8 +52,11 @@ import {
   Rocket,
   Puzzle,
   RefreshCw,
+  Flag,
+  Gamepad2,
   type LucideIcon
 } from 'lucide-react';
+
 
 /* ---------- Jonli fon (aurora + grid) ---------- */
 function Backdrop() {
@@ -88,6 +96,18 @@ const FEATURE_CARDS: FeatureCard[] = [
     ctaColor: 'text-blue-600 dark:text-blue-400',
     accent: 'from-blue-500 via-cyan-400 to-blue-500'
   },
+    {
+    tab: 'snake',
+    title: 'Snake 3D — English Challenge',
+    desc: "3D ilon bilan ovqat yig‘ing, har 10 ta ovqatdan keyin inglizcha so‘zlarni tarjima qiling!",
+    cta: "O‘yinni boshlash",
+    icon: Gamepad2,
+    iconWrap: 'bg-gradient-to-br from-cyan-500 to-blue-600 shadow-cyan-500/30',
+    ctaColor: 'text-cyan-600 dark:text-cyan-400',
+    accent: 'from-cyan-500 via-blue-400 to-cyan-500',
+    hot: true
+  },
+  
   {
     tab: 'tugofwar',
     title: 'Arqon tortish',
@@ -160,10 +180,43 @@ const FEATURE_CARDS: FeatureCard[] = [
     ctaColor: 'text-violet-600 dark:text-violet-400',
     accent: 'from-violet-500 via-indigo-400 to-violet-500',
     hot: true
+  },
+  {
+    tab: 'wordrace',
+    title: "So'z Poygasi",
+    desc: "So'zlarni juftlab botlar bilan poygalashing, tanga yig'ib o'z mashinangizni tuning qiling va reytingda birinchi bo'ling!",
+    cta: 'Poyga va garaj',
+    icon: Flag,
+    iconWrap: 'bg-gradient-to-br from-red-500 to-orange-500 shadow-red-500/30',
+    ctaColor: 'text-red-600 dark:text-red-400',
+    accent: 'from-red-500 via-orange-400 to-red-500',
+    hot: true
   }
 ];
 
 const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+/* ---------- Sahifalar orasida o'tishdagi yuklanish ekrani ---------- */
+// Yuklanish ekrani necha millisekund ko'rinadi (4000 = 4 soniya). Qisqartirish uchun shu sonni o'zgartiring.
+const PAGE_LOAD_MS = 4000;
+
+const PAGE_NAMES: Record<string, string> = {
+  home: 'Bosh sahifa',
+  tests: 'Fan Testlari',
+  multiplayer: '1v1 Viktorina Dueli',
+  boardgames: 'Shaxmat & Shashka',
+  millionaire: 'Kim Millioner?',
+  memorygame: "Xotira O'yini",
+  pomodoro: 'Pomodoro Taymer',
+  library: 'Elektron Kutubxona',
+  teachers: 'Ustozlarni Baholash',
+  leaderboard: 'Reyting',
+  quests: "Missiyalar & Do'kon",
+  tugofwar: 'Arqon tortish',
+  historypuzzle: 'Tarix Puzzle',
+  wordrace: "So'z Poygasi",
+  snake: 'Snake 3D — English Challenge',
+};
 
 /* ---------- Kunlik savol: har bir foydalanuvchi yechgan savollarni eslab qolish ---------- */
 const solvedStorageKey = (userId: unknown) => `daily_solved_${String(userId)}`;
@@ -196,7 +249,7 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [settings, setSettings] = useState<SiteSettings>(StorageService.getSettings());
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [activeTab, setActiveTab] = useState<TabKey>('home');
+  const [activeTab, setActiveTabRaw] = useState<TabKey>('home');
 
   // Modals
   const [profileOpen, setProfileOpen] = useState(false);
@@ -210,6 +263,44 @@ export default function App() {
 
   // Theme
   const [theme, setTheme] = useState<'dark' | 'light'>('light');
+
+  // Kirishdan oldingi kutib olish sahifasi (Boshlash bosilgach login sahifasi ochiladi)
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  // Yuklanish ekrani: har bir sahifaga o'tishda ko'rsatiladi
+  const [pageLoader, setPageLoader] = useState<{ key: number; title: string; ms: number } | null>(null);
+  const loaderTimers = useRef<number[]>([]);
+  const navLockRef = useRef(false);
+
+  useEffect(() => {
+    return () => loaderTimers.current.forEach((t) => window.clearTimeout(t));
+  }, []);
+
+  const startPageLoader = (title: string, onCovered?: () => void) => {
+    if (navLockRef.current) return; // yuklanish paytida qayta bosishlar e'tiborga olinmaydi
+    navLockRef.current = true;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ms = reduce ? 800 : PAGE_LOAD_MS;
+    setPageLoader({ key: Date.now(), title, ms });
+
+    // Sahifa yuklanish ekrani to'liq yopilgach, uning ostida almashtiriladi
+    const t1 = window.setTimeout(() => onCovered?.(), Math.min(600, ms * 0.2));
+    const t2 = window.setTimeout(() => {
+      setPageLoader(null);
+      navLockRef.current = false;
+    }, ms);
+    loaderTimers.current = [t1, t2];
+  };
+
+  // Eski kod `setActiveTab(...)` deb chaqiradi, endi har bir o'tishda yuklanish ekrani chiqadi
+  const setActiveTab = (tab: TabKey) => {
+    if (tab === activeTab) return;
+    startPageLoader(PAGE_NAMES[tab as string] ?? 'Sahifa', () => {
+      setActiveTabRaw(tab);
+      window.scrollTo({ top: 0 });
+    });
+  };
 
   // Quick Daily Question on Home page
   const [dailyQIndex, setDailyQIndex] = useState(0);
@@ -265,14 +356,20 @@ export default function App() {
   };
 
   const handleUserStatsUpdated = () => {
-    setCurrentUser(StorageService.getCurrentUser());
+    // Ma'lumot vaqtincha null kelsa ham foydalanuvchini kirish sahifasiga tashlab yubormaymiz
+    const fresh = StorageService.getCurrentUser();
+    if (fresh) setCurrentUser(fresh);
   };
 
   const handleLogout = () => {
     StorageService.setCurrentUserId(null);
     setCurrentUser(null);
     setProfileOpen(false);
-    setActiveTab('home');
+    // Chiqishda yuklanish ekrani kerak emas: kutilayotgan o'tishlarni bekor qilamiz
+    loaderTimers.current.forEach((t) => window.clearTimeout(t));
+    navLockRef.current = false;
+    setPageLoader(null);
+    setActiveTabRaw('home');
   };
 
   const handleTeacherLogout = () => {
@@ -358,12 +455,17 @@ export default function App() {
 
   // IF NOT LOGGED IN AS STUDENT:
   if (!currentUser) {
+    // Avval chiroyli kutib olish sahifasi
+    if (showWelcome) {
+      return <WelcomeScreen theme={theme} onStart={() => setShowWelcome(false)} />;
+    }
+
     return (
       <div className={`relative min-h-screen flex flex-col bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors ${theme}`}>
         <Backdrop />
 
         <AuthScreen
-          onSuccess={(u) => setCurrentUser(u)}
+          onSuccess={(u) => { setCurrentUser(u); startPageLoader('Bosh sahifa'); }}
           onTeacherSuccess={(t) => {
             setCurrentTeacher(t);
             setTeacherModalOpen(true);
@@ -664,6 +766,13 @@ export default function App() {
                 );
               })}
             </div>
+            {/* TAB: SNAKE 3D */}
+            {activeTab === ('snake' as TabKey) && (
+              <SnakeGame
+                currentUser={currentUser}
+                onUserStatsUpdated={handleUserStatsUpdated}
+              />
+            )}
 
             {/* Promokod Faollashtirish Qismi */}
             <div className="neon-card p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
@@ -870,6 +979,30 @@ export default function App() {
           />
         )}
 
+
+        {/* TAB: SO'Z POYGASI */}
+        {activeTab === ('wordrace' as TabKey) && (
+          <WordRaceGame
+            currentUser={currentUser}
+            onUserStatsUpdated={handleUserStatsUpdated}
+          />
+        )}
+        {/* TAB: SNAKE 3D */}
+        {activeTab === ('snake' as TabKey) && (
+          <SnakeGame
+            currentUser={currentUser}
+            onUserStatsUpdated={handleUserStatsUpdated}
+          />
+        )}
+        
+        {/* TAB: SKY MAZE 3D */}
+        {activeTab === ('maze' as TabKey) && (
+          <MazeGame
+            currentUser={currentUser}
+            onUserStatsUpdated={handleUserStatsUpdated}
+          />
+        )}
+
         {/* TAB: TESTLAR */}
         {activeTab === 'tests' && (
           <TestsSection
@@ -962,6 +1095,9 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
+
+      {/* Sahifalar orasidagi yuklanish ekrani */}
+      {pageLoader && <PageLoader key={pageLoader.key} title={pageLoader.title} duration={pageLoader.ms} />}
 
       {/* Profile Modal */}
       {currentUser && (

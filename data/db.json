@@ -1,6 +1,6 @@
 {
-  "version": 18,
-  "lastUpdated": 1793270255689,
+  "version": 38,
+  "lastUpdated": 1793863362463,
   "users": [
     {
       "id": "user_1793224108505",
@@ -12,9 +12,9 @@
       "favoriteTeacher": "",
       "bestFriend": "",
       "avatar": "",
-      "coins": 150,
-      "xp": 154,
-      "level": 1,
+      "coins": 75,
+      "xp": 244,
+      "level": 2,
       "badges": [
         "faol_ishtirokchi"
       ],
@@ -513,14 +513,6 @@
       "username": "karimova",
       "password": "29maktab",
       "createdAt": "2026-10-26"
-    },
-    {
-      "id": "teacher_1793268513658",
-      "fullName": "+998 778242012",
-      "subject": "Texnologiya",
-      "username": "ttt",
-      "password": "8m7n6b5v",
-      "createdAt": "2026-10-29"
     }
   ]
 }
